@@ -7,5 +7,6 @@ import org.springframework.boot.runApplication
 class SucotalkApplication
 
 fun main(args: Array<String>) {
+	println(test)
 	runApplication<SucotalkApplication>(*args)
 }
