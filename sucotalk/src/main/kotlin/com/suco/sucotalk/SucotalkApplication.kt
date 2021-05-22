@@ -1,5 +1,6 @@
 package com.suco.sucotalk
 
+import com.suco.sucotalk.member.domain.Member
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -7,6 +8,7 @@ import org.springframework.boot.runApplication
 class SucotalkApplication
 
 fun main(args: Array<String>) {
-	println(test)
+	val member: Member = Member(1, "D", "D")
+
 	runApplication<SucotalkApplication>(*args)
 }
