@@ -3,9 +3,11 @@ package com.suco.sucotalk.member.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.service.MemberService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -56,5 +58,31 @@ class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(Member(name = "test2", password = "test2"))))
                 .andExpect(status().isCreated)
+    }
+
+    @DisplayName("로그인 요청을 수행한다. :: 올바른 유저일 경우 세션을 저장")
+    @Test
+    fun loginMember() {
+        val response = mockMvc.perform(
+            post("/member/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestMember))
+        ).andExpect(status().isOk).andReturn()
+
+        assertThat(response.request.session!!.getAttribute("login-user")).isEqualTo(requestMember.name)
+    }
+
+    @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 에러 발생")
+    @Test
+    fun loginMemberWithInvalidUser() {
+        val nonExistMember = Member(name= "nonExist", password = "invalid")
+
+        val response = mockMvc.perform(
+            post("/member/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(nonExistMember))
+        ).andExpect(status().is4xxClientError).andReturn()
+
+        assertThat(response.request.session!!.getAttribute("login-user")).isNotEqualTo(requestMember.name)
     }
 }

@@ -8,7 +8,5 @@ import org.springframework.boot.runApplication
 class SucotalkApplication
 
 fun main(args: Array<String>) {
-	val member: Member = Member(1, "D", "D")
-
 	runApplication<SucotalkApplication>(*args)
 }
