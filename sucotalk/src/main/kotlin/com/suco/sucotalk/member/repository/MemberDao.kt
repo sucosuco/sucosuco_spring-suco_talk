@@ -32,7 +32,7 @@ class MemberDao(private val jdbcTemplate: JdbcTemplate) {
     fun findByName(name: String): Member {
         val sql = "SELECT * FROM MEMBER WHERE name = ?"
         try {
-            return jdbcTemplate.queryForObject(sql, rowMapper, name) ?: throw IllegalArgumentException("")
+            return jdbcTemplate.queryForObject(sql, rowMapper, name)!!
         } catch (e: EmptyResultDataAccessException) {
             throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
         }
