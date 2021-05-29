@@ -13,14 +13,23 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
     private val keyHolder = GeneratedKeyHolder()
 
     fun create(room: Room): Long {
-        val sql = "INSERT ROOM (name) VALUES (?) "
+        val sql = "INSERT INTO ROOM (name) VALUES (?) "
 
         jdbcTemplate.update({
             val ps = it.prepareStatement(sql, arrayOf("id"))
             ps.setString(1, room.name)
             ps
         }, keyHolder)
+        saveParticipants(Room(keyHolder.key!!.toLong(), room.name, room.members))
         return keyHolder.key!!.toLong()
+    }
+
+    fun saveParticipants(room: Room) {
+        val sql = "INSERT INTO PARTICIPANTS (member_id, room_id) VALUES(?, ?)"
+        jdbcTemplate.batchUpdate(sql, room.members, 100) { ps, argument ->
+            ps.setLong(1, argument.id)
+            ps.setLong(2, room.id!!)
+        }
     }
 
     fun findById(id: Long): Room {
@@ -37,15 +46,15 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
     fun findParticipantsById(id: Long): List<Long> {
         val sql = "SELECT member_id FROM PARTICIPANTS WHERE room_id = ?"
-        return jdbcTemplate.query(sql) { rs, rn ->
+        return jdbcTemplate.query(sql, { rs, rn ->
             rs.getLong("member_id")
-        }
+        }, id)
     }
 
-    fun findEnteredRoomIds(member: Member): List<Long> {
-        val sql = "SELECT room_id PARTICIPANCS WHERE member_id = ?"
-        return jdbcTemplate.query(sql) { rs, rn ->
-            rs.getLong("member_id")
-        }
+    fun findRoomByMember(member: Member): List<Long> {
+        val sql = "SELECT room_id FROM PARTICIPANTS WHERE member_id = ?"
+        return jdbcTemplate.query(sql, { rs, rn ->
+            rs.getLong("room_id")
+        }, member.id)
     }
 }

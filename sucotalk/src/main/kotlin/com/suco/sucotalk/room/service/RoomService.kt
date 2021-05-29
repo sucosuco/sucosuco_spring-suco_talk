@@ -1,5 +1,6 @@
 package com.suco.sucotalk.room.service
 
+import com.suco.sucotalk.chat.domain.Message
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
@@ -16,13 +17,15 @@ class RoomService(private val roomRepositoryImpl: RoomRepositoryImpl) {
         return roomRepositoryImpl.save(room)
     }
 
-    fun sendDirectMessage(member1: Member, member2: Member) {
-        val dmRoom = findDirectRoom(member1, member2) ?: create(Room(members = mutableListOf(member1, member2)))
+    fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
+        val dmRoom = findDirectRoom(sender, receiver) ?: create(Room(members = mutableListOf(sender, receiver)))
+        val message = Message(sender = sender, room = dmRoom, content = message)
+
     }
 
-    fun findDirectRoom(member1: Member, member2: Member): Room? {
-        val dmRooms1 = roomRepositoryImpl.findEnteredRoom(member1).filter { it.isDm() }
-        val dmRooms2 = roomRepositoryImpl.findEnteredRoom(member2).filter { it.isDm() }
+    fun findDirectRoom(sender: Member, receiver: Member): Room? {
+        val dmRooms1 = roomRepositoryImpl.findEnteredRoom(sender).filter { it.isDm() }
+        val dmRooms2 = roomRepositoryImpl.findEnteredRoom(receiver).filter { it.isDm() }
 
         return dmRooms1.find { dmRooms2.contains(it) }
     }
