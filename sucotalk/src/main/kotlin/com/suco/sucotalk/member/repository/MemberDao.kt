@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
-import java.lang.IllegalArgumentException
-import java.lang.NullPointerException
 
 @Repository
 class MemberDao(private val jdbcTemplate: JdbcTemplate) {
@@ -26,25 +24,25 @@ class MemberDao(private val jdbcTemplate: JdbcTemplate) {
         return keyHolder.key!!.toLong()
     }
 
-    fun findById(id: Long) : Member {
+    fun findById(id: Long): Member {
         val sql = "SELECT * FROM MEMBER WHERE id = ?"
-        return jdbcTemplate.queryForObject(sql, rowMapper, id)?:
-            throw IllegalArgumentException("")
+        return jdbcTemplate.queryForObject(sql, rowMapper, id) ?: throw IllegalArgumentException("")
     }
 
-    fun findByName(name: String) : Member {
+    fun findByName(name: String): Member {
         val sql = "SELECT * FROM MEMBER WHERE name = ?"
         try {
-            return jdbcTemplate.queryForObject(sql, rowMapper, name) ?:
-                throw IllegalArgumentException("")
-        } catch (e : EmptyResultDataAccessException) {
+            return jdbcTemplate.queryForObject(sql, rowMapper, name) ?: throw IllegalArgumentException("")
+        } catch (e: EmptyResultDataAccessException) {
             throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
         }
     }
 
     private val rowMapper = RowMapper<Member> { rs, rn ->
-        Member(rs.getLong("id"),
-                rs.getString("name"),
-                rs.getString("password"))
+        Member(
+            rs.getLong("id"),
+            rs.getString("name"),
+            rs.getString("password")
+        )
     }
 }

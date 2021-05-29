@@ -4,13 +4,12 @@ import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.IllegalArgumentException
 import java.net.URI
 import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/member")
-class MemberController(private val memberService: MemberService ) {
+class MemberController(private val memberService: MemberService) {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<String> {
@@ -18,12 +17,12 @@ class MemberController(private val memberService: MemberService ) {
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long) : ResponseEntity<Member> {
+    fun findById(@PathVariable id: Long): ResponseEntity<Member> {
         return ResponseEntity.ok(memberService.findById(id))
     }
 
     @PostMapping
-    fun create(@RequestBody memberRequest: Member) : ResponseEntity<Void> {
+    fun create(@RequestBody memberRequest: Member): ResponseEntity<Void> {
         val createMemberId = memberService.createMember(memberRequest.name, memberRequest.password)
         return ResponseEntity.created(URI.create("/member/$createMemberId")).build()
     }

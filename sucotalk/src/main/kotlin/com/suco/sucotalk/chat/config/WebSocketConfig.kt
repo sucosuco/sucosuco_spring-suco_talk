@@ -8,10 +8,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-class WebSocketConfig(private val webSocketHandler:WebSocketHandler) : WebSocketConfigurer {
+class WebSocketConfig(private val webSocketHandler: WebSocketHandler) : WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
         registry.addHandler(webSocketHandler, "/suco/chat")
-                .setAllowedOrigins("*")
+            .setAllowedOrigins("*")
     }
 }
