@@ -13,8 +13,14 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
     private val keyHolder = GeneratedKeyHolder()
 
     fun save(message: Message): Long {
-        val sql = "INSERT INTO MESSAGE (sender_id, room_id, content) VALUES (?, ?, ?)"
-        jdbcTemplate.update(sql, message.sender.id, message.room.id, message.content, keyHolder)
+        val sql = "INSERT INTO MESSAGE (sender_id, room_id, contents) VALUES (?, ?, ?)"
+        jdbcTemplate.update({
+            val ps = it.prepareStatement(sql, arrayOf("id"))
+            ps.setLong(1, message.sender.id)
+            ps.setLong(2, message.room.id!!)
+            ps.setString(3, message.content)
+            ps
+        }, keyHolder)
         return keyHolder.key!!.toLong()
     }
 

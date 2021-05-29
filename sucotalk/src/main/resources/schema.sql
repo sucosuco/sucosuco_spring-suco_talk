@@ -29,7 +29,7 @@ create table if not exists MESSAGE
     sender_id bigint not null,
     room_id bigint not null,
     contents varchar(255),
-    send_time TIMESTAMP,
+    send_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key(id),
     foreign key (sender_id) references MEMBER(id),
     foreign key (room_id) references ROOM(id)
