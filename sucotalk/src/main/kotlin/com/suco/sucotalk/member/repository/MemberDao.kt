@@ -4,11 +4,13 @@ import com.suco.sucotalk.member.domain.Member
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 
 @Repository
-class MemberDao(private val jdbcTemplate: JdbcTemplate) {
+class MemberDao(private val jdbcTemplate: JdbcTemplate, private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
 
@@ -35,6 +37,16 @@ class MemberDao(private val jdbcTemplate: JdbcTemplate) {
             return jdbcTemplate.queryForObject(sql, rowMapper, name)!!
         } catch (e: EmptyResultDataAccessException) {
             throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
+        }
+    }
+
+    fun findByIds(participants: List<Long>): MutableList<Member> {
+        val parameters = MapSqlParameterSource("ids", participants)
+        val sql = "SELECT * FROM MEMBER WHERE id IN (:ids)"
+
+        return namedParameterJdbcTemplate.query(sql, parameters) { rs, rn ->
+            Member(rs.getLong("id"),
+                    rs.getString("name"))
         }
     }
 
