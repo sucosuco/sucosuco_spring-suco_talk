@@ -1,5 +1,6 @@
 package com.suco.sucotalk.room.repository
 
+import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
@@ -36,6 +37,13 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
     fun findParticipantsById(id: Long): List<Long> {
         val sql = "SELECT member_id FROM PARTICIPANTS WHERE room_id = ?"
+        return jdbcTemplate.query(sql) { rs, rn ->
+            rs.getLong("member_id")
+        }
+    }
+
+    fun findEnteredRoomIds(member: Member): List<Long> {
+        val sql = "SELECT room_id PARTICIPANCS WHERE member_id = ?"
         return jdbcTemplate.query(sql) { rs, rn ->
             rs.getLong("member_id")
         }
