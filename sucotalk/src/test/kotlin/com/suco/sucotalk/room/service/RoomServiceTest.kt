@@ -6,9 +6,8 @@ import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
@@ -43,7 +42,7 @@ internal class RoomServiceTest {
 
     @DisplayName("enterNewRoom :: 두 명 이상의 유저가 방을 정상 생성한다.")
     @Test
-    fun createNewRoomTest(){
+    fun createNewRoomTest() {
         val createdRoom: Room = createRoom(listOf(savedMember1, savedMember2))
 
         assertMembersInRoom(createdRoom, savedMember1, savedMember2)
@@ -51,7 +50,7 @@ internal class RoomServiceTest {
 
     @DisplayName("enter :: 유저가 방에 정상 입장한다.")
     @Test
-    fun enterRoomTest(){
+    fun enterRoomTest() {
         val createdRoom: Room = createRoom(listOf(savedMember1, savedMember2))
         val enteredRoom = enterRoom(createdRoom, savedMember3)
 
@@ -60,7 +59,7 @@ internal class RoomServiceTest {
 
     @DisplayName("exit :: 유저가 방에 정상 퇴장한다.")
     @Test
-    fun exitRoomTest(){
+    fun exitRoomTest() {
         val createdRoom: Room = createRoom(listOf(savedMember1, savedMember2))
         val enteredRoom = enterRoom(createdRoom, savedMember3)
         val afterExit = exitRoom(enteredRoom, savedMember1)
@@ -68,12 +67,12 @@ internal class RoomServiceTest {
         assertMembersInRoom(afterExit, savedMember2, savedMember3)
     }
 
-    private fun createRoom(members:List<Member>): Room {
-        roomService.enterNewRoom(members.map{it.id})
+    private fun createRoom(members: List<Member>): Room {
+        roomService.enterNewRoom(members.map { it.id })
         return roomRepositoryImpl.findEnteredRoom(savedMember1).first()
     }
 
-    private fun enterRoom(room: Room, member:Member): Room {
+    private fun enterRoom(room: Room, member: Member): Room {
         roomService.enter(member.id, room.id!!)
         return roomRepositoryImpl.findEnteredRoom(member).first()
     }
@@ -83,11 +82,11 @@ internal class RoomServiceTest {
         return roomRepositoryImpl.findById(room.id!!)
     }
 
-    private fun assertMembersInRoom(room: Room, vararg members : Member) {
+    private fun assertMembersInRoom(room: Room, vararg members: Member) {
         val memberIds = room.members.map { it.id }
 
         assertThat(memberIds).hasSize(members.size)
-        for(member in members){
+        for (member in members) {
             assertThat(memberIds).contains(member.id)
         }
     }
