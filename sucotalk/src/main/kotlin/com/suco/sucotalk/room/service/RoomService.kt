@@ -23,6 +23,16 @@ class RoomService(private val messageService: MessageService,
         roomRepositoryImpl.insertMemberInRoom(room, member)
     }
 
+    fun enterNewRoom(members: List<Member>) : List<Message>{
+        if(members.size == 2){
+            val dmRoom = findDirectRoom(members[0], members[1]) ?: createNewRoom(members)
+            return messageService.findAllInRoom(dmRoom)
+        }
+
+        val dmRoom = createNewRoom(members)
+        return messageService.findAllInRoom(dmRoom)
+    }
+
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
         val dmRoom = findDirectRoom(sender, receiver)
             ?: createNewRoom(mutableListOf(sender, receiver))
