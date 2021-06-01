@@ -8,7 +8,6 @@ import com.suco.sucotalk.room.repository.RoomDao
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,7 +26,6 @@ internal class MessageDaoTest {
     @Autowired
     lateinit var roomDao: RoomDao
 
-    private lateinit var testMessage :Message
     private lateinit var testMember1 :Member
     private lateinit var testMember2 :Member
     private lateinit var testRoom : Room
@@ -48,8 +46,8 @@ internal class MessageDaoTest {
 
     @Test
     fun save() {
-
-
+        val savedId = messageDao.save(Message(sender = testMember1, room = testRoom, content = "hi"))
+        assertThat(savedId).isNotNull
     }
 
     @Test
@@ -58,10 +56,6 @@ internal class MessageDaoTest {
         val savedId2 = messageDao.save(Message(sender = testMember2, room = testRoom, content = "hey"))
         val savedId3 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "bye"))
         val messagesInRoom : List<Message> = messageDao.findByRoom(testRoom)
-
-        messagesInRoom.forEach {
-            print("-------------------" + it.content)
-        }
 
         assertThat(messagesInRoom).hasSize(3)
         assertThat(messagesInRoom.map { it.id }).usingRecursiveComparison().isEqualTo(mutableListOf(savedId1, savedId2, savedId3))

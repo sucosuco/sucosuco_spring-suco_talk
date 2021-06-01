@@ -57,4 +57,14 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
             rs.getLong("room_id")
         }, member.id)
     }
+
+    fun deleteMemberInRoom(room: Room, member: Member) {
+        val sql = "DELETE FROM PARTICIPANTS WHERE room_id = ? AND member_id = ?"
+        jdbcTemplate.update(sql, room.id, member.id)
+    }
+
+    fun insertMemberInRoom(room: Room, member: Member) {
+        val sql = "INSERT INTO PARTICIPANTS (member_id, room_id) VALUES (?, ?)"
+        jdbcTemplate.update(sql, member.id, room.id)
+    }
 }

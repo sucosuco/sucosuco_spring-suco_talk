@@ -1,29 +1,42 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.chat.domain.Message
+import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
-class RoomService(private val roomRepositoryImpl: RoomRepositoryImpl) {
+class RoomService(private val messageService: MessageService,
+                  private val roomRepositoryImpl: RoomRepositoryImpl) {
 
-    fun enter(member: Member, roomId: Long) {
-//        roomRepositoryImpl.enterRoom(member, roomId)
+    fun exit(member: Member, roomId: Long){
+        val room = roomRepositoryImpl.findById(roomId)
+        room.exit(member)
+        roomRepositoryImpl.deleteMemberInRoom(room, member)
     }
 
-    fun create(room: Room): Room {
-        return roomRepositoryImpl.save(room)
+    fun enter(member: Member, roomId: Long) {
+        val room = roomRepositoryImpl.findById(roomId)
+        room.enter(member)
+        roomRepositoryImpl.insertMemberInRoom(room, member)
     }
 
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
-        val dmRoom = findDirectRoom(sender, receiver) ?: create(Room(members = mutableListOf(sender, receiver)))
-        val message = Message(sender = sender, room = dmRoom, content = message)
+        val dmRoom = findDirectRoom(sender, receiver)
+            ?: createNewRoom(mutableListOf(sender, receiver))
 
+        val message = Message(sender = sender, room = dmRoom, content = message)
+        messageService.save(message)
+//        socketService.send(message)
     }
 
-    fun findDirectRoom(sender: Member, receiver: Member): Room? {
+    private fun createNewRoom(members : List<Member>) : Room{
+        return roomRepositoryImpl.save(Room(members = members))
+    }
+
+    private fun findDirectRoom(sender: Member, receiver: Member): Room? {
         val dmRooms1 = roomRepositoryImpl.findEnteredRoom(sender).filter { it.isDm() }
         val dmRooms2 = roomRepositoryImpl.findEnteredRoom(receiver).filter { it.isDm() }
 

@@ -27,13 +27,13 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
     fun findByRoom(room: Room): List<Message> {
         val sql = "SELECT MS.id, MS.contents, MS.send_time, ME.id as member_id, ME.name FROM MEMBER as ME JOIN MESSAGE as MS ON ME.id = MS.sender_id WHERE MS.room_id = ?"
 
-        return jdbcTemplate.query(sql, {rs, rn ->
+        return jdbcTemplate.query(sql, { rs, rn ->
             Message(
-                    id = rs.getLong("id"),
-                    sender = Member(rs.getLong("member_id"), rs.getString("name")),
-                    room = room,
-                    content = rs.getString("contents") ,
-                    time = rs.getTimestamp("send_time").toString()
+                id = rs.getLong("id"),
+                sender = Member(rs.getLong("member_id"), rs.getString("name")),
+                room = room,
+                content = rs.getString("contents"),
+                time = rs.getTimestamp("send_time").toString()
             )
         }, room.id)
     }

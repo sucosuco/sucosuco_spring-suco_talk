@@ -10,8 +10,7 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
 
     fun save(room: Room) :Room{
         val savedId = roomDao.create(room)
-        val savedRoom = findById(savedId) /// 참여자 정보를 가져
-        return savedRoom
+        return findById(savedId)
     }
 
     fun findById(id: Long): Room {
@@ -24,5 +23,13 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     fun findEnteredRoom(member: Member): List<Room> {
         val ids = roomDao.findRoomByMember(member)
         return ids.map { findById(it) }
+    }
+
+    fun deleteMemberInRoom(room: Room, member: Member) {
+        roomDao.deleteMemberInRoom(room, member)
+    }
+
+    fun insertMemberInRoom(room: Room, member: Member) {
+        roomDao.insertMemberInRoom(room, member)
     }
 }
