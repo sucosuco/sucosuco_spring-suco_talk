@@ -19,14 +19,10 @@ class RoomRepositoryImplTest {
     private lateinit var roomRepositoryImpl: RoomRepositoryImpl
 
     @Autowired
-    private lateinit var roomDao: RoomDao
-
-    @Autowired
     private lateinit var memberDao: MemberDao
 
     private lateinit var testMember1: Member
     private lateinit var testMember2: Member
-    private lateinit var testRoom: Room
 
     @BeforeEach
     fun init() {
