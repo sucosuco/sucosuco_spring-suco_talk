@@ -3,27 +3,35 @@ package com.suco.sucotalk.room.service
 import com.suco.sucotalk.chat.domain.Message
 import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
 class RoomService(private val messageService: MessageService,
-                  private val roomRepositoryImpl: RoomRepositoryImpl) {
+                  private val roomRepositoryImpl: RoomRepositoryImpl,
+                  private val memberDao: MemberDao) {
 
-    fun exit(member: Member, roomId: Long){
+    fun exit(memberId: Long, roomId: Long): Member {
+        val member = memberDao.findById(memberId)
         val room = roomRepositoryImpl.findById(roomId)
         room.exit(member)
         roomRepositoryImpl.deleteMemberInRoom(room, member)
+        return member
     }
 
-    fun enter(member: Member, roomId: Long) {
+    fun enter(memberId: Long, roomId: Long) : List<Message> {
+        val member = memberDao.findById(memberId)
         val room = roomRepositoryImpl.findById(roomId)
         room.enter(member)
         roomRepositoryImpl.insertMemberInRoom(room, member)
+        return messageService.findAllInRoom(room)
     }
 
-    fun enterNewRoom(members: List<Member>) : List<Message>{
+    fun enterNewRoom(memberIds: List<Long>) : List<Message>{
+        val members = memberIds.map{memberDao.findById(it)}
+
         if(members.size == 2){
             val dmRoom = findDirectRoom(members[0], members[1]) ?: createNewRoom(members)
             return messageService.findAllInRoom(dmRoom)
