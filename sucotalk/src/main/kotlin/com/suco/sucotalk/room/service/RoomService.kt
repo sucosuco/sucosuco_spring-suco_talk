@@ -33,13 +33,21 @@ class RoomService(private val messageService: MessageService,
         return messageService.findAllInRoom(dmRoom)
     }
 
+    fun sendMessage(sender: Member, roomId: Long, message: String){
+        sendMessage(sender, roomRepositoryImpl.findById(roomId), message)
+    }
+
+    fun sendMessage(sender: Member, room: Room, message: String){
+        val message = Message(sender = sender, room = room, content = message)
+        messageService.save(message)
+//        socketService.send(message)
+    }
+
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
         val dmRoom = findDirectRoom(sender, receiver)
             ?: createNewRoom(mutableListOf(sender, receiver))
 
-        val message = Message(sender = sender, room = dmRoom, content = message)
-        messageService.save(message)
-//        socketService.send(message)
+        sendMessage(sender, dmRoom, message)
     }
 
     private fun createNewRoom(members : List<Member>) : Room{
