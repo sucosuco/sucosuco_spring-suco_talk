@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 @Service
 class MessageService(private val messageDao: MessageDao) {
 
-    fun save(message: Message) {
-        messageDao.save(message)
+    fun save(message: Message) : Message {
+        return messageDao.save(message)
     }
 
     fun findAllInRoom(room: Room): List<Message> {
