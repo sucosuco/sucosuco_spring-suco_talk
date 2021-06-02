@@ -1,6 +1,7 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.chat.domain.Message
+import com.suco.sucotalk.chat.dto.MessageDto
 import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
@@ -21,7 +22,7 @@ class RoomService(private val messageService: MessageService,
         return member
     }
 
-    fun enter(memberId: Long, roomId: Long) : List<Message> {
+    fun enter(memberId: Long, roomId: Long) : List<MessageDto> {
         val member = memberDao.findById(memberId)
         val room = roomRepositoryImpl.findById(roomId)
         room.enter(member)
@@ -29,7 +30,7 @@ class RoomService(private val messageService: MessageService,
         return messageService.findAllInRoom(room)
     }
 
-    fun enterNewRoom(memberIds: List<Long>) : List<Message>{
+    fun enterNewRoom(memberIds: List<Long>) : List<MessageDto>{
         val members = memberIds.map{memberDao.findById(it)}
 
         if(members.size == 2){
