@@ -4,7 +4,7 @@ import com.suco.sucotalk.member.domain.Member
 
 class Room(val id: Long? = null, val name: String = "", members: List<Member> = listOf()) {
 
-    val members : MutableList<Member> = members.toMutableList()
+    val members: MutableList<Member> = members.toMutableList()
 
     fun enter(member: Member) {
         members.add(member)

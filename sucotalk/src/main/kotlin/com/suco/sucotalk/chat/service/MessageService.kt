@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class MessageService(private val messageDao: MessageDao) {
 
-    fun save(message: Message) : MessageDto {
+    fun save(message: Message): MessageDto {
         return MessageDto.of(messageDao.save(message))
     }
 

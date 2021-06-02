@@ -10,9 +10,11 @@ import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
-class RoomService(private val messageService: MessageService,
-                  private val roomRepositoryImpl: RoomRepositoryImpl,
-                  private val memberDao: MemberDao) {
+class RoomService(
+    private val messageService: MessageService,
+    private val roomRepositoryImpl: RoomRepositoryImpl,
+    private val memberDao: MemberDao
+) {
 
     fun exit(memberId: Long, roomId: Long): Member {
         val member = memberDao.findById(memberId)
@@ -22,7 +24,7 @@ class RoomService(private val messageService: MessageService,
         return member
     }
 
-    fun enter(memberId: Long, roomId: Long) : List<MessageDto> {
+    fun enter(memberId: Long, roomId: Long): List<MessageDto> {
         val member = memberDao.findById(memberId)
         val room = roomRepositoryImpl.findById(roomId)
         room.enter(member)
@@ -30,10 +32,10 @@ class RoomService(private val messageService: MessageService,
         return messageService.findAllInRoom(room)
     }
 
-    fun enterNewRoom(memberIds: List<Long>) : List<MessageDto>{
-        val members = memberIds.map{memberDao.findById(it)}
+    fun enterNewRoom(memberIds: List<Long>): List<MessageDto> {
+        val members = memberIds.map { memberDao.findById(it) }
 
-        if(members.size == 2){
+        if (members.size == 2) {
             val dmRoom = findDirectRoom(members[0], members[1]) ?: createNewRoom(members)
             return messageService.findAllInRoom(dmRoom)
         }
@@ -42,11 +44,11 @@ class RoomService(private val messageService: MessageService,
         return messageService.findAllInRoom(dmRoom)
     }
 
-    fun sendMessage(sender: Member, roomId: Long, message: String){
+    fun sendMessage(sender: Member, roomId: Long, message: String) {
         sendMessage(sender, roomRepositoryImpl.findById(roomId), message)
     }
 
-    fun sendMessage(sender: Member, room: Room, message: String){
+    fun sendMessage(sender: Member, room: Room, message: String) {
         val message = Message(sender = sender, room = room, content = message)
         messageService.save(message)
 //        socketService.send(message)
@@ -59,7 +61,7 @@ class RoomService(private val messageService: MessageService,
         sendMessage(sender, dmRoom, message)
     }
 
-    private fun createNewRoom(members : List<Member>) : Room{
+    private fun createNewRoom(members: List<Member>): Room {
         return roomRepositoryImpl.save(Room(members = members))
     }
 

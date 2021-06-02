@@ -6,9 +6,8 @@ import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomDao
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 internal class MessageDaoTest {
 
     @Autowired
-    lateinit var memberDao:MemberDao
+    lateinit var memberDao: MemberDao
 
     @Autowired
     lateinit var messageDao: MessageDao
@@ -26,16 +25,16 @@ internal class MessageDaoTest {
     @Autowired
     lateinit var roomDao: RoomDao
 
-    private lateinit var testMember1 :Member
-    private lateinit var testMember2 :Member
-    private lateinit var testRoom : Room
+    private lateinit var testMember1: Member
+    private lateinit var testMember2: Member
+    private lateinit var testRoom: Room
 
     @BeforeEach
-    fun init(){
-        val memberId1 = memberDao.insert(Member(name = "corgi"))
+    fun init() {
+        val memberId1 = memberDao.insert(Member("corgi", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member(name = "suri"))
+        val memberId2 = memberDao.insert(Member("suri", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         val roomId = roomDao.create(Room(members = mutableListOf(testMember1, testMember2)))
@@ -55,9 +54,10 @@ internal class MessageDaoTest {
         val savedMessage1 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "hi"))
         val savedMessage2 = messageDao.save(Message(sender = testMember2, room = testRoom, content = "hey"))
         val savedMessage3 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "bye"))
-        val messagesInRoom : List<Message> = messageDao.findByRoom(testRoom)
+        val messagesInRoom: List<Message> = messageDao.findByRoom(testRoom)
 
         assertThat(messagesInRoom).hasSize(3)
-        assertThat(messagesInRoom.map { it.id }).usingRecursiveComparison().isEqualTo(mutableListOf(savedMessage1.id, savedMessage2.id, savedMessage3.id))
+        assertThat(messagesInRoom.map { it.id }).usingRecursiveComparison()
+            .isEqualTo(mutableListOf(savedMessage1.id, savedMessage2.id, savedMessage3.id))
     }
 }

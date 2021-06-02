@@ -1,15 +1,11 @@
 package com.suco.sucotalk.chat.service
 
 import com.suco.sucotalk.chat.domain.Message
-import com.suco.sucotalk.chat.dto.MessageDto
-import com.suco.sucotalk.chat.repository.MessageDao
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomDao
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.tuple
-import org.assertj.core.groups.Tuple
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -36,10 +32,10 @@ class MessageServiceTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member(name = "corgi"))
+        val memberId1 = memberDao.insert(Member("corgi", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member(name = "suri"))
+        val memberId2 = memberDao.insert(Member("suri", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         val roomId = roomDao.create(Room(members = mutableListOf(testMember1, testMember2)))

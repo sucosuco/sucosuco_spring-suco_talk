@@ -36,10 +36,10 @@ class RoomServiceTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member(name = "corgi"))
+        val memberId1 = memberDao.insert(Member("corgi", "test"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member(name = "suri"))
+        val memberId2 = memberDao.insert(Member("suri", "test"))
         testMember2 = memberDao.findById(memberId2)
     }
 
@@ -50,9 +50,9 @@ class RoomServiceTest {
 
     @BeforeEach
     fun initMemberAndRoom() {
-        val savedMemberId1 = memberService.createMember("testMember1", "testPassword")
-        val savedMemberId2 = memberService.createMember("testMember2", "testPassword")
-        val savedMemberId3 = memberService.createMember("testMember3", "testPassword")
+        val savedMemberId1 = memberService.createMember("test1", "test")
+        val savedMemberId2 = memberService.createMember("test2", "test")
+        val savedMemberId3 = memberService.createMember("test3", "test")
 
         savedMember1 = memberService.findById(savedMemberId1)
         savedMember2 = memberService.findById(savedMemberId2)
