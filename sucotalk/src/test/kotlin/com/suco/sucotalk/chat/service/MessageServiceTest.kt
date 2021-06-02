@@ -52,6 +52,7 @@ class MessageServiceTest {
     @DisplayName("메시지를 저장한다.")
     @Test
     fun saveMessage() {
+
         //given
         val testMessage = Message(sender = testMember1, room = testRoom, content = "테스트")
 
@@ -65,17 +66,24 @@ class MessageServiceTest {
     @DisplayName("채팅방의 모든 메시지를 가져온다.")
     @Test
     fun findAllMessageInRoom() {
+
         //given
         val testMessage1 = messageService.save(Message(sender = testMember1, room = testRoom, content = "테스트1"))
         val testMessage2 = messageService.save(Message(sender = testMember2, room = testRoom, content = "테스트2"))
         val testMessage3 = messageService.save(Message(sender = testMember2, room = testRoom, content = "테스트3"))
+
         //when
         val messages = messageService.findAllInRoom(testRoom)
 
-        //then
-        assertThat(messages)
-                .extracting(MessageDto::id)
-                .contains(tuple(testMessage1.id), tuple(testMessage2.id), tuple(testMessage3.id))
-    }
+        assertThat(messages.map { it.id })
+            .contains(testMessage1.id)
+            .contains(testMessage2.id)
+            .contains(testMessage3.id)
 
+
+        //then
+//        assertThat(messages)
+//                .extracting(MessageDto::id)
+//                .contains(tuple(testMessage1.id), tuple(testMessage2.id), tuple(testMessage3.id))
+    }
 }

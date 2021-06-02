@@ -1,8 +1,9 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.member.domain.Member
-
+import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.member.service.MemberService
+
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 
@@ -23,6 +24,9 @@ class RoomServiceTest {
 
     @Autowired
     lateinit var roomService: RoomService
+
+    @Autowired
+    lateinit var memberService: MemberService
 
     @Autowired
     private lateinit var memberDao: MemberDao

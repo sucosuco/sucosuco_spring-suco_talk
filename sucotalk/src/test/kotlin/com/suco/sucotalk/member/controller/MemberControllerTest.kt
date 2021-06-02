@@ -73,7 +73,7 @@ class MemberControllerTest {
         assertThat(response.request.session!!.getAttribute("login-user")).isEqualTo(requestMember.name)
     }
 
-    @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 에러 발생")
+    @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 BadRequest 반환")
     @Test
     fun loginMemberWithInvalidUser() {
         val nonExistMember = Member(name = "nonExist", password = "invalid")
@@ -82,7 +82,7 @@ class MemberControllerTest {
             post("/member/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonExistMember))
-        ).andExpect(status().is5xxServerError).andReturn()
+        ).andExpect(status().isBadRequest).andReturn()
 
         assertThat(response.request.session!!.getAttribute("login-user")).isNotEqualTo(requestMember.name)
     }

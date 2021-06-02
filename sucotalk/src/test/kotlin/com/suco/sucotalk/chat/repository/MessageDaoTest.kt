@@ -52,12 +52,12 @@ internal class MessageDaoTest {
 
     @Test
     fun findByRoom() {
-        val savedId1 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "hi"))
-        val savedId2 = messageDao.save(Message(sender = testMember2, room = testRoom, content = "hey"))
-        val savedId3 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "bye"))
+        val savedMessage1 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "hi"))
+        val savedMessage2 = messageDao.save(Message(sender = testMember2, room = testRoom, content = "hey"))
+        val savedMessage3 = messageDao.save(Message(sender = testMember1, room = testRoom, content = "bye"))
         val messagesInRoom : List<Message> = messageDao.findByRoom(testRoom)
 
         assertThat(messagesInRoom).hasSize(3)
-        assertThat(messagesInRoom.map { it.id }).usingRecursiveComparison().isEqualTo(mutableListOf(savedId1, savedId2, savedId3))
+        assertThat(messagesInRoom.map { it.id }).usingRecursiveComparison().isEqualTo(mutableListOf(savedMessage1.id, savedMessage2.id, savedMessage3.id))
     }
 }
