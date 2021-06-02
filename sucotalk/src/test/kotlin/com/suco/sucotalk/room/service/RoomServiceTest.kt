@@ -1,9 +1,11 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.member.domain.Member
+
 import com.suco.sucotalk.member.service.MemberService
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
+
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 @SpringBootTest
-internal class RoomServiceTest {
+class RoomServiceTest {
 
     @Autowired
     lateinit var roomRepositoryImpl: RoomRepositoryImpl
@@ -23,7 +25,20 @@ internal class RoomServiceTest {
     lateinit var roomService: RoomService
 
     @Autowired
-    lateinit var memberService: MemberService
+    private lateinit var memberDao: MemberDao
+
+    private lateinit var testMember1: Member
+    private lateinit var testMember2: Member
+
+    @BeforeEach
+    fun init() {
+        val memberId1 = memberDao.insert(Member(name = "corgi"))
+        testMember1 = memberDao.findById(memberId1)
+
+        val memberId2 = memberDao.insert(Member(name = "suri"))
+        testMember2 = memberDao.findById(memberId2)
+    }
+
 
     lateinit var savedMember1: Member
     lateinit var savedMember2: Member

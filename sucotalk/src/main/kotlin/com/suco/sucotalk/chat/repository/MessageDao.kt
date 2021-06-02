@@ -12,7 +12,7 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
 
-    fun save(message: Message): Long {
+    fun save(message: Message): Message {
         val sql = "INSERT INTO MESSAGE (sender_id, room_id, contents) VALUES (?, ?, ?)"
         jdbcTemplate.update({
             val ps = it.prepareStatement(sql, arrayOf("id"))
@@ -21,7 +21,8 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
             ps.setString(3, message.content)
             ps
         }, keyHolder)
-        return keyHolder.key!!.toLong()
+        val id = keyHolder.key!!.toLong()
+        return Message(id,message.sender, message.room, message.content)
     }
 
     fun findByRoom(room: Room): List<Message> {
