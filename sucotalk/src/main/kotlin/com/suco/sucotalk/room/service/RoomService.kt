@@ -6,26 +6,33 @@ import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.dto.RoomCreateRequest
+import com.suco.sucotalk.room.dto.RoomCreateResponse
+import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
 class RoomService(
-    private val messageService: MessageService,
-    private val roomRepositoryImpl: RoomRepositoryImpl,
-    private val memberDao: MemberDao
+        private val messageService: MessageService,
+        private val roomRepositoryImpl: RoomRepositoryImpl,
+        private val memberDao: MemberDao
 ) {
 
-    fun exit(memberId: Long, roomId: Long): Member {
-        val member = memberDao.findById(memberId)
+    fun rooms(): List<RoomDto> {
+        return RoomDto.listOf(roomRepositoryImpl.getAllRoom())
+    }
+
+    fun exit(memberName: String, roomId: Long): Member {
+        val member = memberDao.findByName(memberName)
         val room = roomRepositoryImpl.findById(roomId)
         room.exit(member)
         roomRepositoryImpl.deleteMemberInRoom(room, member)
         return member
     }
 
-    fun enter(memberId: Long, roomId: Long): List<MessageDto> {
-        val member = memberDao.findById(memberId)
+    fun enter(memberName: String, roomId: Long): List<MessageDto> {
+        val member = memberDao.findByName(memberName)
         val room = roomRepositoryImpl.findById(roomId)
         room.enter(member)
         roomRepositoryImpl.insertMemberInRoom(room, member)
@@ -56,9 +63,15 @@ class RoomService(
 
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
         val dmRoom = findDirectRoom(sender, receiver)
-            ?: createNewRoom(mutableListOf(sender, receiver))
+                ?: createNewRoom(mutableListOf(sender, receiver))
 
         sendMessage(sender, dmRoom, message)
+    }
+
+    fun createRoom(roomInfo: RoomCreateRequest): RoomCreateResponse {
+        val members = memberDao.findByIds(roomInfo.members)
+        val savedRoom = roomRepositoryImpl.save(Room(name = roomInfo.name, members = members))
+        return RoomCreateResponse.of(savedRoom)
     }
 
     private fun createNewRoom(members: List<Member>): Room {

@@ -92,12 +92,12 @@ class RoomServiceTest {
     }
 
     private fun enterRoom(room: Room, member: Member): Room {
-        roomService.enter(member.id, room.id!!)
+        roomService.enter(member.name, room.id!!)
         return roomRepositoryImpl.findEnteredRoom(member).first()
     }
 
     private fun exitRoom(room: Room, member: Member): Room {
-        roomService.exit(member.id, room.id!!)
+        roomService.exit(member.name, room.id!!)
         return roomRepositoryImpl.findById(room.id!!)
     }
 
