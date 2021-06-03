@@ -4,6 +4,12 @@ spring:
     url: jdbc:h2:mem:testdb
     username: sa
     password:
+
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+
   h2:
     console:
       enabled: true
+
