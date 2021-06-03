@@ -12,7 +12,7 @@ data class RoomDto(val id: Long?, val name: String) {
 
         fun listOf(rooms: List<Room>): List<RoomDto> {
             return rooms.stream()
-                    .map { RoomDto.of(it) }
+                    .map { of(it) }
                     .collect(Collectors.toList())
         }
     }

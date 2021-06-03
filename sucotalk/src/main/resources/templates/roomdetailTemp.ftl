@@ -30,8 +30,9 @@
     </div>
     <ul class="list-group">
         <#list messages as message>
-            <li class="list-group-item" v-for="message in messages">
+            <li class="list-group-item">
                 ${message.sender} - ${message.message}
+            </li>
         </#list>
     </ul>
 </div>

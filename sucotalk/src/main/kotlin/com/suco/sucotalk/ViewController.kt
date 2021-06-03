@@ -1,27 +1,24 @@
 package com.suco.sucotalk
 
+import com.suco.sucotalk.chat.dto.MessageDto
+import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.service.RoomService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class ViewController(private val roomService: RoomService){
 
-    @GetMapping("/rooms/1")
-    fun test(model: Model) : String{
+    @GetMapping("/rooms/{id}")
+    fun test(@PathVariable id :Long, model: Model) : String{
+        val room : Room = roomService.findById(id)
+        val messages :List<MessageDto> = roomService.messagesInRoom(room)
 
-        val tempRoom1 = RoomDTO("Our first room")
-        model.addAttribute("room",tempRoom1)
-
-        val tempMsg1 = MessageDTO("코기", "hi")
-        val tempMsg2 = MessageDTO("수리", "hi")
-
-        model.addAttribute("messages", listOf(tempMsg1, tempMsg2))
+        model.addAttribute("room", RoomDto.of(room))
+        model.addAttribute("messages", messages)
         return "roomdetailTemp"
     }
 }
-
-data class RoomDTO(val name :String)
-
-data class MessageDTO(val sender :String, val message:String)

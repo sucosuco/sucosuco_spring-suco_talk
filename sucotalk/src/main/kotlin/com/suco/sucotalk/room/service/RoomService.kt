@@ -84,4 +84,12 @@ class RoomService(
 
         return dmRooms1.find { dmRooms2.contains(it) }
     }
+
+    fun findById(id :Long): Room {
+        return roomRepositoryImpl.findById(id)
+    }
+
+    fun messagesInRoom(room: Room): List<MessageDto> {
+        return messageService.findAllInRoom(room)
+    }
 }
