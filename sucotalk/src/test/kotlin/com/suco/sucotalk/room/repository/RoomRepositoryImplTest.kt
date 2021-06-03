@@ -26,20 +26,22 @@ class RoomRepositoryImplTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member(name = "corgi"))
+        val memberId1 = memberDao.insert(Member(name = "corgi", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member(name = "suri"))
+        val memberId2 = memberDao.insert(Member(name = "suri", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         roomRepositoryImpl.save(Room(members = mutableListOf(testMember1, testMember2)))
     }
 
-    @DisplayName("룸을 찾는다.")
+    @DisplayName("유저가 입장해 있는 룸을 찾는다.")
     @Test
     fun findById() {
         val findEnteredRoom = roomRepositoryImpl.findEnteredRoom(testMember1)
-        assertThat(findEnteredRoom.get(0).members)
-                .usingRecursiveComparison().isEqualTo(mutableListOf(testMember1, testMember2))
+
+        assertThat(findEnteredRoom.size == 1)
+        assertThat(findEnteredRoom.first().members.map { it.id })
+            .usingRecursiveComparison().isEqualTo(mutableListOf(testMember1.id, testMember2.id))
     }
 }

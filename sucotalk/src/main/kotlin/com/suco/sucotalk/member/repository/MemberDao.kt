@@ -1,6 +1,7 @@
 package com.suco.sucotalk.member.repository
 
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.member.exception.MemberException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -10,7 +11,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 
 @Repository
-class MemberDao(private val jdbcTemplate: JdbcTemplate, private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
+class MemberDao(
+    private val jdbcTemplate: JdbcTemplate,
+    private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
+) {
 
     private val keyHolder = GeneratedKeyHolder()
 
@@ -27,16 +31,19 @@ class MemberDao(private val jdbcTemplate: JdbcTemplate, private val namedParamet
     }
 
     fun findById(id: Long): Member {
-        val sql = "SELECT * FROM MEMBER WHERE id = ?"
-        return jdbcTemplate.queryForObject(sql, rowMapper, id) ?: throw IllegalArgumentException("")
+        try {
+            val sql = "SELECT * FROM MEMBER WHERE id = ?"
+            return jdbcTemplate.queryForObject(sql, rowMapper, id)!!
+        } catch (e: EmptyResultDataAccessException) {
+            throw MemberException("존재하지 않는 회원입니다.")
+        }
     }
 
     fun findByName(name: String): Member {
-        val sql = "SELECT * FROM MEMBER WHERE name = ?"
         try {
-            return jdbcTemplate.queryForObject(sql, rowMapper, name)!!
+            return jdbcTemplate.queryForObject("SELECT * FROM MEMBER WHERE name = ?", rowMapper, name)!!
         } catch (e: EmptyResultDataAccessException) {
-            throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
+            throw MemberException("등록되지 않은 아이디 입니다.")
         }
     }
 
@@ -45,8 +52,10 @@ class MemberDao(private val jdbcTemplate: JdbcTemplate, private val namedParamet
         val sql = "SELECT * FROM MEMBER WHERE id IN (:ids)"
 
         return namedParameterJdbcTemplate.query(sql, parameters) { rs, rn ->
-            Member(rs.getLong("id"),
-                    rs.getString("name"))
+            Member(
+                rs.getLong("id"),
+                rs.getString("name")
+            )
         }
     }
 
