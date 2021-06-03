@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: MemberDao) {
 
-    fun getAllRoom(): List<Room> {
-        return roomDao.getAllRoom()
-    }
-
     fun save(room: Room): Room {
         val savedId = roomDao.create(room)
         return findById(savedId)
