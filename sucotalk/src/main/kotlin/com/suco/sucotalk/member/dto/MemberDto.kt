@@ -8,5 +8,9 @@ data class MemberDto(val id: Long, val name: String) {
         fun of(member: Member): MemberDto {
             return MemberDto(member.id, member.name)
         }
+
+        fun listOf(members: MutableList<Member>): List<MemberDto> {
+            return members.map { of(it) }
+        }
     }
 }

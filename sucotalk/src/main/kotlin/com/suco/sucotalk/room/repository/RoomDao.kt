@@ -12,6 +12,15 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
 
+    fun getAllRoom(): List<Room> {
+        val sql = "SELECT * FROM ROOM"
+
+        return jdbcTemplate.query(sql) { rs, rn ->
+            Room(rs.getLong("id"),
+                    rs.getString("name"))
+        }
+    }
+
     fun create(room: Room): Long {
         val sql = "INSERT INTO ROOM (name) VALUES (?) "
 

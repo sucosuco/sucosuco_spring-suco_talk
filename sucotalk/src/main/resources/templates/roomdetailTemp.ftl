@@ -1,4 +1,4 @@
-<!doctype html>
+<#ftl encoding="utf-8"/>
 <html lang="en">
 <head>
     <title>Websocket ChatRoom</title>
@@ -17,7 +17,7 @@
 <body>
 <div class="container" id="app" v-cloak>
     <div>
-        <h2>{{room.name}}</h2>
+        <h2>${room.name}</h2>
     </div>
     <div class="input-group">
         <div class="input-group-prepend">
@@ -29,11 +29,11 @@
         </div>
     </div>
     <ul class="list-group">
-        <li class="list-group-item" v-for="message in messages">
-            {{message.sender}} - {{message.message}}</a>
-        </li>
+        <#list messages as message>
+            <li class="list-group-item" v-for="message in messages">
+                ${message.sender} - ${message.message}
+        </#list>
     </ul>
-    <div></div>
 </div>
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
@@ -41,11 +41,9 @@
 <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
 <script>
-    //alert(document.title);
     // websocket & stomp initialize
     var sock = new SockJS("/ws-stomp");
     var ws = Stomp.over(sock);
-    var reconnect = 0;
     // vue.js
     var vm = new Vue({
         el: '#app',
@@ -62,39 +60,43 @@
             this.findRoom();
         },
         methods: {
-            findRoom: function() {
-                axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
+            findRoom: function () {
+                axios.get('/chat/room/' + this.roomId).then(response => {
+                    this.room = response.data;
+                });
             },
-            sendMessage: function() {
-                ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}));
+            sendMessage: function () {
+                ws.send("/pub/chat/message", {}, JSON.stringify({
+                    type: 'TALK',
+                    roomId: this.roomId,
+                    sender: this.sender,
+                    message: this.message
+                }));
                 this.message = '';
             },
-            recvMessage: function(recv) {
-                this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message})
+            recvMessage: function (recv) {
+                this.messages.unshift({
+                    "type": recv.type,
+                    "sender": recv.type == 'ENTER' ? '[알림]' : recv.sender,
+                    "message": recv.message
+                })
             }
         }
     });
-
-    function connect() {
-        // pub/sub event
-        ws.connect({}, function(frame) {
-            ws.subscribe("/sub/chat/room/"+vm.$data.roomId, function(message) {
-                var recv = JSON.parse(message.body);
-                vm.recvMessage(recv);
-            });
-            ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
-        }, function(error) {
-            if(reconnect++ <= 5) {
-                setTimeout(function() {
-                    console.log("connection reconnect");
-                    sock = new SockJS("/ws-stomp");
-                    ws = Stomp.over(sock);
-                    connect();
-                },10*1000);
-            }
+    // pub/sub event
+    ws.connect({}, function (frame) {
+        ws.subscribe("/sub/chat/room/" + vm.$data.roomId, function (message) {
+            var recv = JSON.parse(message.body);
+            vm.recvMessage(recv);
         });
-    }
-    connect();
+        ws.send("/pub/chat/message", {}, JSON.stringify({
+            type: 'ENTER',
+            roomId: vm.$data.roomId,
+            sender: vm.$data.sender
+        }));
+    }, function (error) {
+        alert("error " + error);
+    });
 </script>
 </body>
 </html>
