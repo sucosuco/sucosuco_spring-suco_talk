@@ -75,11 +75,5 @@ class MessageServiceTest {
             .contains(testMessage1.id)
             .contains(testMessage2.id)
             .contains(testMessage3.id)
-
-
-        //then
-//        assertThat(messages)
-//                .extracting(MessageDto::id)
-//                .contains(tuple(testMessage1.id), tuple(testMessage2.id), tuple(testMessage3.id))
     }
 }

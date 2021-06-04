@@ -36,7 +36,5 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
     override fun hashCode(): Int {
         return id?.hashCode() ?: 0
     }
-
-
 }
 

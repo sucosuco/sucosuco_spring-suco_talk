@@ -17,6 +17,7 @@ class RoomController(private val roomService: RoomService, private val httpSessi
 
     @GetMapping("/rooms")
     fun getAllRoom() : ResponseEntity<List<RoomDto>> {
+
         return ResponseEntity.ok(roomService.rooms())
     }
 
