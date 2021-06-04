@@ -31,7 +31,7 @@
     <ul class="list-group">
         <#list messages as message>
             <li class="list-group-item">
-                ${message.sender} - ${message.message}
+                ${message.sender.name} : ${message.contents}       [${message.sendTime}]
             </li>
         </#list>
     </ul>
