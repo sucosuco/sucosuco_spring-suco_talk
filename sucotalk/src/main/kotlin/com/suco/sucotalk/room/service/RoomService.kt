@@ -8,6 +8,7 @@ import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
+import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
@@ -85,11 +86,9 @@ class RoomService(
         return dmRooms1.find { dmRooms2.contains(it) }
     }
 
-    fun findById(id: Long): Room {
-        return roomRepositoryImpl.findById(id)
-    }
-
-    fun messagesInRoom(room: Room): List<MessageDto> {
-        return messageService.findAllInRoom(room)
+    fun roomDetail(id :Long): RoomDetail {
+        val room : Room = roomRepositoryImpl.findById(id)
+        val messages :List<MessageDto> =  messageService.findAllInRoom(room)
+        return RoomDetail(room, messages)
     }
 }
