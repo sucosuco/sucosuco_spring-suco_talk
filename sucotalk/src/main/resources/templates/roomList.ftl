@@ -31,7 +31,7 @@
     </div>
     <ul class="list-group">
         <#list rooms as room>
-            <li class="list-group-item list-group-item-action">
+            <li class="list-group-item list-group-item-action" onclick="location.href='/rooms/'+${room.id}">
             ${room.name} | <#list room.members as member> ${member.name} </#list>
             </li>
         </#list>
