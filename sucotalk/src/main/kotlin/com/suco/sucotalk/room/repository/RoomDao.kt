@@ -16,8 +16,7 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
         val sql = "SELECT * FROM ROOM"
 
         return jdbcTemplate.query(sql) { rs, rn ->
-            Room(rs.getLong("id"),
-                    rs.getString("name"))
+            Room(rs.getLong("id"), rs.getString("name"))
         }
     }
 

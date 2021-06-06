@@ -21,7 +21,8 @@ class RoomService(
 ) {
 
     fun rooms(): List<RoomDto> {
-        return RoomDto.listOf(roomRepositoryImpl.getAllRoom())
+        val rooms = roomRepositoryImpl.findAll()
+        return RoomDto.listOf(rooms)
     }
 
     fun exit(memberName: String, roomId: Long): Member {
@@ -89,6 +90,6 @@ class RoomService(
     fun roomDetail(id :Long): RoomDetail {
         val room : Room = roomRepositoryImpl.findById(id)
         val messages :List<MessageDto> =  messageService.findAllInRoom(room)
-        return RoomDetail(room, messages)
+        return RoomDetail.of(room, messages)
     }
 }

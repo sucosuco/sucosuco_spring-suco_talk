@@ -28,22 +28,6 @@ class RoomServiceTest {
     @Autowired
     lateinit var memberService: MemberService
 
-    @Autowired
-    private lateinit var memberDao: MemberDao
-
-    private lateinit var testMember1: Member
-    private lateinit var testMember2: Member
-
-    @BeforeEach
-    fun init() {
-        val memberId1 = memberDao.insert(Member("corgi", "test"))
-        testMember1 = memberDao.findById(memberId1)
-
-        val memberId2 = memberDao.insert(Member("suri", "test"))
-        testMember2 = memberDao.findById(memberId2)
-    }
-
-
     lateinit var savedMember1: Member
     lateinit var savedMember2: Member
     lateinit var savedMember3: Member

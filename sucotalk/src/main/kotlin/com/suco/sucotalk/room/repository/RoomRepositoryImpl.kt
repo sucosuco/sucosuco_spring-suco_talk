@@ -3,14 +3,11 @@ package com.suco.sucotalk.room.repository
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.dto.RoomDetail
 import org.springframework.stereotype.Repository
 
 @Repository
 class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: MemberDao) {
-
-    fun getAllRoom(): List<Room> {
-        return roomDao.getAllRoom()
-    }
 
     fun save(room: Room): Room {
         val savedId = roomDao.create(room)
@@ -22,6 +19,11 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         val participants: List<Long> = roomDao.findParticipantsById(id)
         val members: MutableList<Member> = memberDao.findByIds(participants)
         return Room(room.id, room.name, members)
+    }
+
+    fun findAll(): List<Room> {
+        val rooms = roomDao.getAllRoom()
+        return rooms.map{ findById(it.id!!)}
     }
 
     fun findEnteredRoom(member: Member): List<Room> {
