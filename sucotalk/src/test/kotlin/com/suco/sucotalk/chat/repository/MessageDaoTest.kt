@@ -31,10 +31,10 @@ internal class MessageDaoTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member("corgi", "password"))
+        val memberId1 = memberDao.insert(Member("test1", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member("suri", "password"))
+        val memberId2 = memberDao.insert(Member("test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         val roomId = roomDao.create(Room(members = mutableListOf(testMember1, testMember2)))

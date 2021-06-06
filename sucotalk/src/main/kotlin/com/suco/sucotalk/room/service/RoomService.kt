@@ -8,19 +8,21 @@ import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
+import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
 class RoomService(
-        private val messageService: MessageService,
-        private val roomRepositoryImpl: RoomRepositoryImpl,
-        private val memberDao: MemberDao
+    private val messageService: MessageService,
+    private val roomRepositoryImpl: RoomRepositoryImpl,
+    private val memberDao: MemberDao
 ) {
 
     fun rooms(): List<RoomDto> {
-        return RoomDto.listOf(roomRepositoryImpl.getAllRoom())
+        val rooms = roomRepositoryImpl.findAll()
+        return RoomDto.listOf(rooms)
     }
 
     fun exit(memberName: String, roomId: Long): Member {
@@ -63,7 +65,7 @@ class RoomService(
 
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
         val dmRoom = findDirectRoom(sender, receiver)
-                ?: createNewRoom(mutableListOf(sender, receiver))
+            ?: createNewRoom(mutableListOf(sender, receiver))
 
         sendMessage(sender, dmRoom, message)
     }
@@ -83,5 +85,11 @@ class RoomService(
         val dmRooms2 = roomRepositoryImpl.findEnteredRoom(receiver).filter { it.isDm() }
 
         return dmRooms1.find { dmRooms2.contains(it) }
+    }
+
+    fun roomDetail(id :Long): RoomDetail {
+        val room : Room = roomRepositoryImpl.findById(id)
+        val messages :List<MessageDto> =  messageService.findAllInRoom(room)
+        return RoomDetail.of(room, messages)
     }
 }

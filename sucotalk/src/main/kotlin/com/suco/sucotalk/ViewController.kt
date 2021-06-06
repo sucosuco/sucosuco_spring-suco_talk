@@ -4,24 +4,24 @@ import com.suco.sucotalk.room.service.RoomService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
-class ViewController(private val roomService: RoomService){
+class ViewController(private val roomService: RoomService) {
 
-    @GetMapping("/rooms/1")
-    fun test(model: Model) : String{
+    @GetMapping("/roomList")
+    fun showRoomList(model: Model): String {
+        model.addAttribute("rooms", roomService.rooms())
+        return "roomList"
+    }
 
-        val tempRoom1 = RoomDTO("Our first room")
-        model.addAttribute("room",tempRoom1)
+    @GetMapping("/rooms/{id}")
+    fun showRoom(@PathVariable id: Long, model: Model): String {
+        val roomDetail = roomService.roomDetail(id)
 
-        val tempMsg1 = MessageDTO("코기", "hi")
-        val tempMsg2 = MessageDTO("수리", "hi")
+        model.addAttribute("room", roomDetail.room)
+        model.addAttribute("messages", roomDetail.messages)
 
-        model.addAttribute("messages", listOf(tempMsg1, tempMsg2))
-        return "roomdetailTemp"
+        return "roomDetail"
     }
 }
-
-data class RoomDTO(val name :String)
-
-data class MessageDTO(val sender :String, val message:String)

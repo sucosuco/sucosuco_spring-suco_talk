@@ -32,10 +32,10 @@ class MessageServiceTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member("corgi", "password"))
+        val memberId1 = memberDao.insert(Member("test1", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member("suri", "password"))
+        val memberId2 = memberDao.insert(Member("test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         val roomId = roomDao.create(Room(members = mutableListOf(testMember1, testMember2)))
@@ -75,11 +75,5 @@ class MessageServiceTest {
             .contains(testMessage1.id)
             .contains(testMessage2.id)
             .contains(testMessage3.id)
-
-
-        //then
-//        assertThat(messages)
-//                .extracting(MessageDto::id)
-//                .contains(tuple(testMessage1.id), tuple(testMessage2.id), tuple(testMessage3.id))
     }
 }

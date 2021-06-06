@@ -14,10 +14,6 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
         members.remove(member)
     }
 
-    fun headCount(): Int {
-        return members.size
-    }
-
     fun isDm(): Boolean {
         return members.size == 2
     }
@@ -36,7 +32,5 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
     override fun hashCode(): Int {
         return id?.hashCode() ?: 0
     }
-
-
 }
 

@@ -26,10 +26,10 @@ class RoomRepositoryImplTest {
 
     @BeforeEach
     fun init() {
-        val memberId1 = memberDao.insert(Member(name = "corgi", "password"))
+        val memberId1 = memberDao.insert(Member(name = "test1", "password"))
         testMember1 = memberDao.findById(memberId1)
 
-        val memberId2 = memberDao.insert(Member(name = "suri", "password"))
+        val memberId2 = memberDao.insert(Member(name = "test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
         roomRepositoryImpl.save(Room(members = mutableListOf(testMember1, testMember2)))
