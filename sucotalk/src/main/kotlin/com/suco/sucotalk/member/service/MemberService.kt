@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 @Service
 class MemberService(private val memberDao: MemberDao) {
+
     fun findById(id: Long): Member {
         return memberDao.findById(id)
     }
@@ -21,5 +22,9 @@ class MemberService(private val memberDao: MemberDao) {
         val savedMember = memberDao.findByName(loginRequest.name)
         savedMember.confirmPassword(savedMember.password)
         return savedMember.name
+    }
+
+    fun findAll(): List<Member>? {
+        return memberDao.findAll()
     }
 }

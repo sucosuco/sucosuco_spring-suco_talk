@@ -16,6 +16,11 @@ class MemberController(private val memberService: MemberService) {
         return ResponseEntity.badRequest().body(e.message)
     }
 
+    @GetMapping
+    fun findAll(): ResponseEntity<List<Member>> {
+        return ResponseEntity.ok(memberService.findAll())
+    }
+
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): ResponseEntity<Member> {
         return ResponseEntity.ok(memberService.findById(id))
