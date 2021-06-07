@@ -1,12 +1,9 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.member.domain.Member
-import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.member.service.MemberService
-
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
-
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession
 
 @RestController
 @RequestMapping("/member")
-class MemberController(private val memberService: MemberService) {
+class MemberController(private val memberService: MemberService, private val httpSession: HttpSession) {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<String> {
@@ -19,6 +19,12 @@ class MemberController(private val memberService: MemberService) {
     @GetMapping
     fun findAll(): ResponseEntity<List<Member>> {
         return ResponseEntity.ok(memberService.findAll())
+    }
+
+    @GetMapping("/friends")
+    fun findFriends(): ResponseEntity<List<Member>> {
+        val name = httpSession.getAttribute("login-user") as String
+        return ResponseEntity.ok(memberService.findFriends(name))
     }
 
     @GetMapping("/{id}")
