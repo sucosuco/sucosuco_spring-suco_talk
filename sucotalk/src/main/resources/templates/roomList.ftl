@@ -19,7 +19,8 @@
             <h3>{{loginMember.name}}</h3>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+            <button id="logInBtn" class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+            <button id="logOutBtn" class="btn btn-primary btn-block" type="button" @click="logout">로그아웃</button>
         </div>
     </div>
     <div class="row">
@@ -68,6 +69,11 @@
             selectedFriends: []
         },
         created() {
+            // 페이지 시작 시 로그인 세션을 확인하고 싶으면 어떻게 해야 좋을까
+
+            document.getElementById('logInBtn').style.display = 'initial'
+            document.getElementById('logOutBtn').style.display = 'none'
+
             this.findAllRoom();
         },
         methods: {
@@ -87,6 +93,19 @@
                     alert('로그인 되었습니다.')
                     this.loginMember = response.data;
                     this.findFriends();
+
+                    document.getElementById('logInBtn').style.display = 'none'
+                    document.getElementById('logOutBtn').style.display = 'initial'
+
+                }).catch(error => {
+                    alert(error.response.data.message);
+                });
+            },
+            logout: function () {
+                axios.post('/member/logout',{
+                }).then(response => {
+                    alert('로그아웃 되었습니다.')
+                    location.reload();
                 }).catch(error => {
                     alert(error.response.data.message);
                 });
