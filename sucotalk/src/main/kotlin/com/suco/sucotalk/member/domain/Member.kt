@@ -19,6 +19,8 @@ class Member(val id: Long, val name: String, val password: String = "") {
     }
 
     fun confirmPassword(password: String) {
-        check(this.password == password) { throw MemberException("비밀번호가 일치하지 않습니다.") }
+        check(this.password == password) {
+            throw MemberException("비밀번호가 일치하지 않습니다.")
+        }
     }
 }

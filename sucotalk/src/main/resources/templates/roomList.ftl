@@ -42,7 +42,7 @@
                 </div>
                 <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
+                    <button id="createRoomBtn" class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
                 </div>
             </div>
             <ul class="list-group">
@@ -71,9 +71,7 @@
         created() {
             // 페이지 시작 시 로그인 세션을 확인하고 싶으면 어떻게 해야 좋을까
 
-            document.getElementById('logInBtn').style.display = 'initial'
-            document.getElementById('logOutBtn').style.display = 'none'
-
+            this.setViewLoggedOut();
             this.findAllRoom();
         },
         methods: {
@@ -93,10 +91,7 @@
                     alert('로그인 되었습니다.')
                     this.loginMember = response.data;
                     this.findFriends();
-
-                    document.getElementById('logInBtn').style.display = 'none'
-                    document.getElementById('logOutBtn').style.display = 'initial'
-
+                    this.setViewLoggedIn();
                 }).catch(error => {
                     alert(error.response.data.message);
                 });
@@ -165,6 +160,16 @@
             },
             isSelected(id) {
                 return this.selectedFriends.includes(id);
+            },
+            setViewLoggedIn: function (){
+                document.getElementById('logInBtn').style.display = 'none'
+                document.getElementById('logOutBtn').style.display = 'initial'
+                document.getElementById('createRoomBtn').style.display = 'initial'
+            },
+            setViewLoggedOut: function (){
+                document.getElementById('logInBtn').style.display = 'initial'
+                document.getElementById('logOutBtn').style.display = 'none'
+                document.getElementById('createRoomBtn').style.display = 'none'
             }
         }
     });
