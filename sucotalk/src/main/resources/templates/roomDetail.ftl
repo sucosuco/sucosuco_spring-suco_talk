@@ -1,4 +1,4 @@
-<#ftl encoding="utf-8"/>
+<!doctype html>
 <html lang="en">
 <head>
     <title>Websocket ChatRoom</title>
@@ -17,7 +17,8 @@
 <body>
 <div class="container" id="app" v-cloak>
     <div>
-        <h2>${room.name}</h2>
+        <h2>{{room.name}}</h2>
+        <h5 v-for="member in room.members">{{member.name}}</h5>
     </div>
     <div class="input-group">
         <div class="input-group-prepend">
@@ -29,12 +30,11 @@
         </div>
     </div>
     <ul class="list-group">
-        <#list messages as message>
-            <li class="list-group-item">
-                ${message.sender.name} : ${message.contents}       [${message.sendTime}]
-            </li>
-        </#list>
+        <li class="list-group-item" v-for="message in messages">
+            {{message.sender.name}} - {{message.contents}}     [{{message.sendTime}}]
+        </li>
     </ul>
+    <div></div>
 </div>
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
@@ -56,14 +56,15 @@
             messages: []
         },
         created() {
-            this.roomId = localStorage.getItem('wschat.roomId');
-            this.sender = localStorage.getItem('wschat.sender');
+            const url = location.href.split("/");
+            this.roomId = url[url.length - 1];
             this.findRoom();
         },
         methods: {
             findRoom: function () {
-                axios.get('/chat/room/' + this.roomId).then(response => {
-                    this.room = response.data;
+                axios.get('/rooms/detail/' + this.roomId).then(response => {
+                    this.room = response.data.room;
+                    this.messages = response.data.messages;
                 });
             },
             sendMessage: function () {
@@ -101,3 +102,5 @@
 </script>
 </body>
 </html>
+
+
