@@ -25,12 +25,11 @@ class RoomService(
         return RoomDto.listOf(rooms)
     }
 
-    fun exit(memberName: String, roomId: Long): Member {
+    fun exit(memberName: String, roomId: Long) {
         val member = memberDao.findByName(memberName)
         val room = roomRepositoryImpl.findById(roomId)
         room.exit(member)
         roomRepositoryImpl.deleteMemberInRoom(room, member)
-        return member
     }
 
     fun enter(memberName: String, roomId: Long): List<MessageDto> {

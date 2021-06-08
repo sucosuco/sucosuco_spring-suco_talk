@@ -35,13 +35,13 @@ class RoomController(private val roomService: RoomService, private val httpSessi
 
     @PostMapping("/rooms/enter/{room_id}")
     fun enterRoom(@PathVariable("room_id") roomId: Long, memberId: Long?) {
-        val name = httpSession.getAttribute("login-user") as String
-        roomService.enter(name, roomId)
+        val userName = httpSession.getAttribute("login-user") as String
+        roomService.enter(userName, roomId)
     }
 
     @PostMapping("/rooms/exit/{room_id}")
-    fun exitRoom(@PathVariable("room_id") roomId: Long, memberId: Long?): Member {
-        val name = httpSession.getAttribute("login-user") as String
-        return roomService.exit(name, roomId)
+    fun exitRoom(@PathVariable("room_id") roomId: Long, httpSession: HttpSession) {
+        val userName = httpSession.getAttribute("login-user") as String
+        roomService.exit(userName, roomId)
     }
 }

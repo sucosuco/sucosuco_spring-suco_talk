@@ -116,9 +116,9 @@
                     }).then(
                         response => {
                             alert(response + "방 개설에 성공하였습니다.")
-                            this.room_name = '';
-                            this.findAllRoom();
-                            this.selectedFriends = [];
+                            // this.room_name = '';
+                            // this.findAllRoom();
+                            // this.selectedFriends = [];
                             if (response.status === 201) {
                                 console.log(response.headers.location);
                                 location.href = response.headers.location

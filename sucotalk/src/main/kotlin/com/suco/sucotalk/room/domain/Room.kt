@@ -1,6 +1,7 @@
 package com.suco.sucotalk.room.domain
 
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.room.exception.RoomException
 
 class Room(val id: Long? = null, val name: String = "", members: List<Member> = listOf()) {
 
@@ -11,6 +12,7 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
     }
 
     fun exit(member: Member) {
+        require(members.contains(member)){ throw RoomException("방에 존재하지 않는 사용자입니다.") }
         members.remove(member)
     }
 
