@@ -15,28 +15,45 @@
 <body>
 <div class="container" id="app" v-cloak>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-10">
+            <h3>{{loginMember.name}}</h3>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <h3>친구 리스트</h3>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action" v-bind:class="{ 'active' : isSelected(item.id) }"
+                    v-for="item in friends" v-bind:key="item.id"
+                    v-on:click="toggleFriends(item.id)">
+                    {{item.name}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
             <h3>채팅방 리스트</h3>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">방제목</label>
+                </div>
+                <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.id"
+                    v-on:click="enterRoom(item.id)">
+                    {{item.name}}
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <label class="input-group-text">방제목</label>
-        </div>
-        <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
-            <button class="btn btn-primary" type="button" @click="login">로그인</button>
-        </div>
-    </div>
-    <ul class="list-group">
-        <#list rooms as room>
-            <li class="list-group-item list-group-item-action" onclick="location.href='/rooms/'+${room.id}">
-            ${room.name} | <#list room.members as member> ${member.name} </#list>
-            </li>
-        </#list>
-    </ul>
 </div>
+
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
 <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
@@ -44,17 +61,22 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            room_name : '',
-            chatrooms: []
+            loginMember: {},
+            room_name: '',
+            chatrooms: [],
+            friends: [],
+            selectedFriends: []
         },
         created() {
             this.findAllRoom();
         },
         methods: {
-            findAllRoom: function() {
-                axios.get('/rooms').then(response => { this.chatrooms = response.data; });
+            findAllRoom: function () {
+                axios.get('/rooms').then(response => {
+                    this.chatrooms = response.data;
+                });
             },
-            login: function() {
+            login: function () {
                 const name = prompt("아이디를 입력해 주세요")
                 const pw = prompt("비밀번호를 입력해주세요")
 
@@ -63,28 +85,37 @@
                     password: pw
                 }).then(response => {
                     alert('로그인 되었습니다.')
+                    this.loginMember = response.data;
+                    this.findFriends();
                 });
             },
-            createRoom: function() {
-                if("" === this.room_name) {
+            createRoom: function () {
+                if ("" === this.room_name) {
                     alert("방 제목을 입력해 주십시요.");
                     return;
                 } else {
                     axios.post('/rooms', {
                         "name": this.room_name,
-                        "members" : []
+                        "members": this.selectedFriends
                     }).then(
-                            response => {
-                                alert(response +"방 개설에 성공하였습니다." )
-                                this.room_name = '';
-                                this.findAllRoom();
+                        response => {
+                            alert(response + "방 개설에 성공하였습니다.")
+                            this.room_name = '';
+                            this.findAllRoom();
+                            this.selectedFriends = [];
+                            if (response.status === 201) {
+                                console.log(response.headers.location);
+                                location.href= response.headers.location
                             }
-                        )
-                        .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
+                        }
+                    )
+                        .catch(response => {
+                            alert("채팅방 개설에 실패하였습니다.");
+                        });
                 }
             },
-            enterRoom: function(roomId) {
-                axios.post('/rooms/enter/' + roomId)
+            enterRoom: function (roomId) {
+                location.href='/rooms/'+ roomId;
                 /*var sender = prompt('대화명을 입력해 주세요.');
                 if(sender != "") {
                     localStorage.setItem('wschat.sender',sender);
@@ -93,6 +124,28 @@
 
                     location.href="/rooms/enter/"+roomId;
                 }*/
+            },
+            findFriends: function () {
+                axios.get('/member/friends').then(response => {
+                    this.friends = response.data;
+                });
+            },
+            toggleFriends(id) {
+                if (this.selectedFriends.includes(id)) {
+                    const newArray = [];
+                    for (let i = 0; i < this.selectedFriends.length; i++) {
+                        if (this.selectedFriends[i] !== id) {
+                            newArray.push(this.selectedFriends[i]);
+                        }
+                    }
+                    this.selectedFriends = newArray;
+                } else {
+                    this.selectedFriends.push(id);
+                }
+
+            },
+            isSelected(id) {
+                return this.selectedFriends.includes(id);
             }
         }
     });

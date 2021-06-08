@@ -30,6 +30,11 @@ class MemberDao(
         return keyHolder.key!!.toLong()
     }
 
+    fun findAll(): List<Member> {
+        val sql = "SELECT * FROM MEMBER";
+        return jdbcTemplate.query(sql, rowMapper)
+    }
+
     fun findById(id: Long): Member {
         try {
             val sql = "SELECT * FROM MEMBER WHERE id = ?"

@@ -76,6 +76,14 @@ class RoomService(
         return RoomCreateResponse.of(savedRoom)
     }
 
+    fun createRoom(masterName: String, roomInfo: RoomCreateRequest): RoomCreateResponse {
+        val master = memberDao.findByName(masterName);
+        val members = memberDao.findByIds(roomInfo.members)
+        members.add(master);
+        val savedRoom = roomRepositoryImpl.save(Room(name = roomInfo.name, members = members))
+        return RoomCreateResponse.of(savedRoom)
+    }
+
     private fun createNewRoom(members: List<Member>): Room {
         return roomRepositoryImpl.save(Room(members = members))
     }
