@@ -37,7 +37,7 @@
             <h3>채팅방 리스트</h3>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text">방제목</label>
+                    <label class="input-group-text">방 제목</label>
                 </div>
                 <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
                 <div class="input-group-append">
@@ -58,7 +58,7 @@
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
 <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
 <script>
-    var vm = new Vue({
+    const vm = new Vue({
         el: '#app',
         data: {
             loginMember: {},
@@ -87,6 +87,8 @@
                     alert('로그인 되었습니다.')
                     this.loginMember = response.data;
                     this.findFriends();
+                }).catch(error => {
+                    alert(error.response.data.message);
                 });
             },
             createRoom: function () {
@@ -105,17 +107,16 @@
                             this.selectedFriends = [];
                             if (response.status === 201) {
                                 console.log(response.headers.location);
-                                location.href= response.headers.location
+                                location.href = response.headers.location
                             }
                         }
-                    )
-                        .catch(response => {
-                            alert("채팅방 개설에 실패하였습니다.");
-                        });
+                    ).catch(response => {
+                        alert("채팅방 개설에 실패하였습니다.");
+                    });
                 }
             },
             enterRoom: function (roomId) {
-                location.href='/rooms/'+ roomId;
+                location.href = '/rooms/' + roomId;
                 /*var sender = prompt('대화명을 입력해 주세요.');
                 if(sender != "") {
                     localStorage.setItem('wschat.sender',sender);
@@ -142,7 +143,6 @@
                 } else {
                     this.selectedFriends.push(id);
                 }
-
             },
             isSelected(id) {
                 return this.selectedFriends.includes(id);

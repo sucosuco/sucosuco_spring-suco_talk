@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception::class)
-    fun handlerUnhandledException(): ResponseEntity<String> {
+    fun handlerUnhandledException(): ResponseEntity<ExceptionResponseDto> {
         val message = "Oop.. There's unhandled exception"
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message)
+        val exceptionResponse = ExceptionResponseDto(message)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse)
     }
 
     @ExceptionHandler(MemberException::class)
-    fun handleMemberException(e: RuntimeException): ResponseEntity<String> {
-        return ResponseEntity.badRequest().body(e.message)
+    fun handleMemberException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
+        val exceptionResponse = ExceptionResponseDto(e.message)
+        return ResponseEntity.badRequest().body(exceptionResponse)
     }
 }
