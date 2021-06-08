@@ -15,6 +15,14 @@
 <body>
 <div class="container" id="app" v-cloak>
     <div class="row">
+        <div class="col-md-10">
+            <h3>{{loginMember.name}}</h3>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-3">
             <h3>친구 리스트</h3>
             <ul class="list-group">
@@ -34,7 +42,6 @@
                 <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
-                    <button class="btn btn-primary" type="button" @click="login">로그인</button>
                 </div>
             </div>
             <ul class="list-group">
@@ -54,6 +61,7 @@
     var vm = new Vue({
         el: '#app',
         data: {
+            loginMember: {},
             room_name: '',
             chatrooms: [],
             friends: [],
@@ -77,6 +85,7 @@
                     password: pw
                 }).then(response => {
                     alert('로그인 되었습니다.')
+                    this.loginMember = response.data;
                     this.findFriends();
                 });
             },

@@ -1,6 +1,7 @@
 package com.suco.sucotalk.member.controller
 
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.member.dto.MemberDto
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -39,9 +40,9 @@ class MemberController(private val memberService: MemberService, private val htt
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: Member, httpSession: HttpSession): ResponseEntity<Void> {
-        val userName = memberService.login(loginRequest)
-        httpSession.setAttribute("login-user", userName)
-        return ResponseEntity.ok().build()
+    fun login(@RequestBody loginRequest: Member, httpSession: HttpSession): ResponseEntity<MemberDto> {
+        val memberDto = memberService.login(loginRequest)
+        httpSession.setAttribute("login-user", memberDto.name)
+        return ResponseEntity.ok(memberDto)
     }
 }
