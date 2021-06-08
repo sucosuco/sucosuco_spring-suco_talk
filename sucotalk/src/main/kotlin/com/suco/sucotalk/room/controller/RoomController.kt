@@ -3,6 +3,7 @@ package com.suco.sucotalk.room.controller
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
+import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.service.RoomService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,9 +21,15 @@ class RoomController(private val roomService: RoomService, private val httpSessi
         return ResponseEntity.ok(roomService.rooms())
     }
 
+    @GetMapping("/rooms/detail/{room_id}")
+    fun getRoomDetail(@PathVariable("room_id") roomId: Long): ResponseEntity<RoomDetail> {
+        return ResponseEntity.ok(roomService.roomDetail(roomId));
+    }
+
     @PostMapping("/rooms")
     fun createNewRoom(@RequestBody request : RoomCreateRequest): ResponseEntity<RoomCreateResponse>? {
-        val room :RoomCreateResponse = roomService.createRoom(request)
+        val master = httpSession.getAttribute("login-user") as String
+        val room :RoomCreateResponse = roomService.createRoom(master, request)
         return ResponseEntity.created(URI.create("/rooms/" + room.id)).body(room);
     }
 
