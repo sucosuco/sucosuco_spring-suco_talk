@@ -103,6 +103,10 @@
                             this.room_name = '';
                             this.findAllRoom();
                             this.selectedFriends = [];
+                            if (response.status === 201) {
+                                console.log(response.headers.location);
+                                location.href= response.headers.location
+                            }
                         }
                     )
                         .catch(response => {
