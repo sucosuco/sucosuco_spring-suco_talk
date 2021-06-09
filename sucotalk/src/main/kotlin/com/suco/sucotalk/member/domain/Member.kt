@@ -19,6 +19,23 @@ class Member(val id: Long, val name: String, val password: String = "") {
     }
 
     fun confirmPassword(password: String) {
-        check(this.password == password) { throw MemberException("비밀번호가 일치하지 않습니다.") }
+        check(this.password == password) {
+            throw MemberException("비밀번호가 일치하지 않습니다.")
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Member
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
     }
 }

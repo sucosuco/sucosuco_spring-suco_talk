@@ -19,7 +19,8 @@
             <h3>{{loginMember.name}}</h3>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+            <button id="logInBtn" class="btn btn-primary btn-block" type="button" @click="login">로그인</button>
+            <button id="logOutBtn" class="btn btn-primary btn-block" type="button" @click="logout">로그아웃</button>
         </div>
     </div>
     <div class="row">
@@ -37,11 +38,11 @@
             <h3>채팅방 리스트</h3>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <label class="input-group-text">방제목</label>
+                    <label class="input-group-text">방 제목</label>
                 </div>
                 <input type="text" class="form-control" v-model="room_name" v-on:keyup.enter="createRoom">
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
+                    <button id="createRoomBtn" class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
                 </div>
             </div>
             <ul class="list-group">
@@ -58,7 +59,7 @@
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
 <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
 <script>
-    var vm = new Vue({
+    const vm = new Vue({
         el: '#app',
         data: {
             loginMember: {},
@@ -68,6 +69,9 @@
             selectedFriends: []
         },
         created() {
+            // 페이지 시작 시 로그인 세션을 확인하고 싶으면 어떻게 해야 좋을까
+
+            this.setViewLoggedOut();
             this.findAllRoom();
         },
         methods: {
@@ -87,6 +91,18 @@
                     alert('로그인 되었습니다.')
                     this.loginMember = response.data;
                     this.findFriends();
+                    this.setViewLoggedIn();
+                }).catch(error => {
+                    alert(error.response.data.message);
+                });
+            },
+            logout: function () {
+                axios.post('/member/logout',{
+                }).then(response => {
+                    alert('로그아웃 되었습니다.')
+                    location.reload();
+                }).catch(error => {
+                    alert(error.response.data.message);
                 });
             },
             createRoom: function () {
@@ -100,22 +116,21 @@
                     }).then(
                         response => {
                             alert(response + "방 개설에 성공하였습니다.")
-                            this.room_name = '';
-                            this.findAllRoom();
-                            this.selectedFriends = [];
+                            // this.room_name = '';
+                            // this.findAllRoom();
+                            // this.selectedFriends = [];
                             if (response.status === 201) {
                                 console.log(response.headers.location);
-                                location.href= response.headers.location
+                                location.href = response.headers.location
                             }
                         }
-                    )
-                        .catch(response => {
-                            alert("채팅방 개설에 실패하였습니다.");
-                        });
+                    ).catch(response => {
+                        alert("채팅방 개설에 실패하였습니다.");
+                    });
                 }
             },
             enterRoom: function (roomId) {
-                location.href='/rooms/'+ roomId;
+                location.href = '/rooms/' + roomId;
                 /*var sender = prompt('대화명을 입력해 주세요.');
                 if(sender != "") {
                     localStorage.setItem('wschat.sender',sender);
@@ -142,10 +157,19 @@
                 } else {
                     this.selectedFriends.push(id);
                 }
-
             },
             isSelected(id) {
                 return this.selectedFriends.includes(id);
+            },
+            setViewLoggedIn: function (){
+                document.getElementById('logInBtn').style.display = 'none'
+                document.getElementById('logOutBtn').style.display = 'initial'
+                document.getElementById('createRoomBtn').style.display = 'initial'
+            },
+            setViewLoggedOut: function (){
+                document.getElementById('logInBtn').style.display = 'initial'
+                document.getElementById('logOutBtn').style.display = 'none'
+                document.getElementById('createRoomBtn').style.display = 'none'
             }
         }
     });

@@ -22,7 +22,7 @@ class MemberService(private val memberDao: MemberDao) {
 
     fun login(loginRequest: Member): MemberDto {
         val savedMember = memberDao.findByName(loginRequest.name)
-        savedMember.confirmPassword(savedMember.password)
+        savedMember.confirmPassword(loginRequest.password)
         return MemberDto.of(savedMember);
     }
 

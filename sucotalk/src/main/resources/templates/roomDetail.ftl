@@ -16,10 +16,16 @@
 </head>
 <body>
 <div class="container" id="app" v-cloak>
-    <div>
-        <h2>{{room.name}}</h2>
-        <h5 v-for="member in room.members">{{member.name}}</h5>
+    <div class="row">
+        <div class="col-md-10">
+            <h2>{{room.name}}</h2>
+            <h5 v-for="member in room.members">{{member.name}}</h5>
+        </div>
+        <div class="col-md-2">
+            <button id="logInBtn" class="btn btn-primary btn-block" type="button" @click="exit">나가기</button>
+        </div>
     </div>
+
     <div class="input-group">
         <div class="input-group-prepend">
             <label class="input-group-text">내용</label>
@@ -49,15 +55,13 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            roomId: '',
+            roomId: ${room.id},
             room: {},
             sender: '',
             message: '',
             messages: []
         },
         created() {
-            const url = location.href.split("/");
-            this.roomId = url[url.length - 1];
             this.findRoom();
         },
         methods: {
@@ -81,6 +85,16 @@
                     "type": recv.type,
                     "sender": recv.type == 'ENTER' ? '[알림]' : recv.sender,
                     "message": recv.message
+                })
+            },
+            exit: function () {
+                axios.post('/rooms/exit/' + this.roomId)
+                .then(response => {
+                    alert('나가기 성공');
+                    location.href = '/roomList';
+                })
+                .catch(error=>{
+                    alert(error.response.data.message);
                 })
             }
         }
