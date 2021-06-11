@@ -21,6 +21,18 @@ class RoomController(private val roomService: RoomService, private val httpSessi
         return ResponseEntity.ok(roomService.rooms())
     }
 
+    @GetMapping("/rooms/my")
+    fun getMyRooms() : ResponseEntity<List<RoomDto>> {
+        val user = httpSession.getAttribute("login-user") as String
+        return ResponseEntity.ok(roomService.myRooms(user))
+    }
+
+    @GetMapping("/rooms/accessible")
+    fun getAccessibleRooms() : ResponseEntity<List<RoomDto>>{
+        val user = httpSession.getAttribute("login-user") as String
+        return ResponseEntity.ok(roomService.accessibleRooms(user))
+    }
+
     @GetMapping("/rooms/detail/{room_id}")
     fun getRoomDetail(@PathVariable("room_id") roomId: Long): ResponseEntity<RoomDetail> {
         return ResponseEntity.ok(roomService.roomDetail(roomId));
