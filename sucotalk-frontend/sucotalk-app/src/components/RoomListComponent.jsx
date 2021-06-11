@@ -27,7 +27,7 @@ class RoomListComponent extends Component {
                         this.state.rooms.map (
                             room =>
                             <li class="list-group-item list-group-item-action" key = {room.id}>
-                                room.name
+                                {room.name}
                             </li>
                         )
                     }
