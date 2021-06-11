@@ -15,7 +15,10 @@ class RoomListComponent extends Component {
         BoardService.getRooms().then((res) => {
             this.setState({rooms: res.data});
         });
+    }
 
+    enterRoom(roomId) {
+        this.props.history.push(`/room/${roomId}`)
     }
 
 
@@ -26,7 +29,7 @@ class RoomListComponent extends Component {
                     {
                         this.state.rooms.map (
                             room =>
-                            <li class="list-group-item list-group-item-action" key = {room.id}>
+                            <li class="list-group-item list-group-item-action" onClick = {() => this.enterRoom(room.id)} key = {room.id}>
                                 {room.name}
                             </li>
                         )

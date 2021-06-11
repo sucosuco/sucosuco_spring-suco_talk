@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
 import RoomListComponent from './components/RoomListComponent';
+import RoomDetailComponent from './components/RoomDetailComponent';
 
 function App() {
   return (
@@ -10,6 +11,8 @@ function App() {
         <div className="container">
           <Switch>
             <Route path = "/" exact component = {RoomListComponent}></Route>
+            <Route path = "/main" exact component = {RoomListComponent}></Route>
+            <Route path = "/room/:id" component = {RoomDetailComponent}></Route>
           </Switch>
         </div>
       </Router>
