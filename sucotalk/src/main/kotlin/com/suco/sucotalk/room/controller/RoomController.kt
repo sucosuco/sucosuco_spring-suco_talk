@@ -1,18 +1,16 @@
 package com.suco.sucotalk.room.controller
 
-import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
 import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.service.RoomService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import javax.servlet.http.HttpSession
 
+@CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 class RoomController(private val roomService: RoomService, private val httpSession: HttpSession) {
 
