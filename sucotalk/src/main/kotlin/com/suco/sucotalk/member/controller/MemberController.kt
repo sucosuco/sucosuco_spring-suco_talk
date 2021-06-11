@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*
 import java.net.URI
 import javax.servlet.http.HttpSession
 
+@CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 @RequestMapping("/member")
 class MemberController(private val memberService: MemberService, private val httpSession: HttpSession) {

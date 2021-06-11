@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BoardService from '../service/SucoTalkService';
+import SucoTalkService from '../service/SucoTalkService';
 
 class RoomListComponent extends Component {
 
@@ -12,7 +12,7 @@ class RoomListComponent extends Component {
     }
 
     componentDidMount() {
-        BoardService.getRooms().then((res) => {
+        SucoTalkService.getRooms().then((res) => {
             this.setState({rooms: res.data});
         });
     }
