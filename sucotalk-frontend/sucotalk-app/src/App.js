@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
-import RoomListComponent from './components/RoomListComponent';
 import RoomDetailComponent from './components/RoomDetailComponent';
 import HeaderComponent from './components/HeaderComponent';
 import SucoTalkService from './service/SucoTalkService';
-import LoginComponent from './components/LoginComponent';
+
+import MainComponent from './components/MainComponent';
 
 class App extends Component{
 
@@ -27,8 +27,9 @@ class App extends Component{
       <Router>
         <div className="container">
           <Switch>
-            <Route path = "/" exact component = {RoomListComponent}></Route>
-            <Route path = "/main" exact component = {RoomListComponent}></Route>
+            <Route path = "/" exact render = {(props) => (
+              <MainComponent user = {this.state.user}/> )}>
+            </Route>
             <Route path = "/room/:id" component = {RoomDetailComponent}></Route>
           </Switch>
         </div>

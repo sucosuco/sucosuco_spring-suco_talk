@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 class LoginComponent extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.user)
 
         this.state = {
             name: '',

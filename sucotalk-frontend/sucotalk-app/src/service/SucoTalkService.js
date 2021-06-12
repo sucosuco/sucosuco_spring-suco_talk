@@ -8,6 +8,14 @@ class SucoTalkService {
         return axios.get(BASE_URL + 'rooms');
     }
 
+    getMyRooms() {
+        return axios.get(BASE_URL + 'rooms/my', { withCredentials: true });
+    }
+
+    getAccessibleRooms() {
+        return axios.get(BASE_URL + 'rooms/accessible', { withCredentials: true });
+    }
+
     getRoomDeatail(roomId) {
         return axios.get(BASE_URL + 'rooms/detail/' + roomId);
     }
@@ -17,7 +25,7 @@ class SucoTalkService {
     }
 
     login(loginInfo) {
-        return axios.post(BASE_URL + '/member/login/', loginInfo);
+        return axios.post(BASE_URL + '/member/login/', loginInfo, { withCredentials: true });
     }
 
     logout() {

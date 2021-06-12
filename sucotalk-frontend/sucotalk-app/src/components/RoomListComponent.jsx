@@ -1,43 +1,29 @@
 import React, { Component } from 'react';
-import SucoTalkService from '../service/SucoTalkService';
+import AllRoomListComponent from '../components/AllRoomListComponent';
+import TabRoomListComponent from '../components/TabRoomListComponent';
+import { withRouter } from 'react-router-dom';
 
 class RoomListComponent extends Component {
 
     constructor(props) {
         super(props)
-
-        this.state = {
-            rooms: []
-        }
     }
-
-    componentDidMount() {
-        SucoTalkService.getRooms().then((res) => {
-            this.setState({rooms: res.data});
-        });
-    }
-
-    enterRoom(roomId) {
-        this.props.history.push(`/room/${roomId}`)
-    }
-
 
     render() {
+        if (JSON.stringify({}) === JSON.stringify(this.props.user)) {
+            return (
+                <div>
+                     <AllRoomListComponent/>
+                </div>
+            )
+           
+        }
         return (
             <div>
-                <ul class="list-group">
-                    {
-                        this.state.rooms.map (
-                            room =>
-                            <li class="list-group-item list-group-item-action" onClick = {() => this.enterRoom(room.id)} key = {room.id}>
-                                {room.name}
-                            </li>
-                        )
-                    }
-                </ul>
+                <TabRoomListComponent/>
             </div>
         );
     }
 }
 
-export default RoomListComponent;
+export default withRouter(RoomListComponent);
