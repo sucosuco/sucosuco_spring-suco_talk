@@ -11,12 +11,12 @@ class AllRoomListComponent extends Component {
             rooms: []
         }
     }
-
-    componentDidUpdate() {
-        SucoTalkService.getRooms().then((res) => {
-            this.setState({rooms: res.data});
-        });
-    }
+    //
+    // componentDidUpdate() {
+    //     SucoTalkService.getRooms().then((res) => {
+    //         this.setState({rooms: res.data});
+    //     });
+    // }
 
     componentDidMount() {
         SucoTalkService.getRooms().then((res) => {
@@ -27,7 +27,6 @@ class AllRoomListComponent extends Component {
     enterRoom(roomId) {
         this.props.history.push(`/room/${roomId}`)
     }
-
 
     render() {
         return (

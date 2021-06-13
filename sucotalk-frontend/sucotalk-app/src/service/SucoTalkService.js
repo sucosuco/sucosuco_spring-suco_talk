@@ -24,7 +24,6 @@ class SucoTalkService {
         return axios.get(BASE_URL + 'member/friends', { withCredentials: true });
     }
 
-
     createRoom(roomInfo) {
         return axios.post(BASE_URL + 'rooms', roomInfo, { withCredentials: true });
     }
@@ -34,11 +33,11 @@ class SucoTalkService {
     }
 
     login(loginInfo) {
-        return axios.post(BASE_URL + '/member/login/', loginInfo, { withCredentials: true });
+        return axios.post(BASE_URL + 'member/login/', loginInfo, { withCredentials: true });
     }
 
     logout() {
-        return axios.post(BASE_URL + '/member/logout/')
+        return axios.post(BASE_URL + 'member/logout/')
     }
 }
 export default new SucoTalkService();
