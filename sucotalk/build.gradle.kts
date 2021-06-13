@@ -30,6 +30,8 @@ dependencies {
 
 	implementation ("org.springframework.boot:spring-boot-starter-freemarker")
 
+	implementation ("net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
