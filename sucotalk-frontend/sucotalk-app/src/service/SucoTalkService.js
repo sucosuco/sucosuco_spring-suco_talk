@@ -20,6 +20,15 @@ class SucoTalkService {
         return axios.get(BASE_URL + 'rooms/detail/' + roomId);
     }
 
+    getFriends() {
+        return axios.get(BASE_URL + 'member/friends', { withCredentials: true });
+    }
+
+
+    createRoom(roomInfo) {
+        return axios.post(BASE_URL + 'rooms', roomInfo, { withCredentials: true });
+    }
+
     exitRoom(roomId) {
         return axios.post(BASE_URL + 'rooms/exit/' + roomId);
     }

@@ -12,6 +12,12 @@ class AllRoomListComponent extends Component {
         }
     }
 
+    componentDidUpdate() {
+        SucoTalkService.getRooms().then((res) => {
+            this.setState({rooms: res.data});
+        });
+    }
+
     componentDidMount() {
         SucoTalkService.getRooms().then((res) => {
             this.setState({rooms: res.data});

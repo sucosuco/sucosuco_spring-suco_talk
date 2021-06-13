@@ -5,6 +5,7 @@ import HeaderComponent from './components/HeaderComponent';
 import SucoTalkService from './service/SucoTalkService';
 
 import MainComponent from './components/MainComponent';
+import RoomCreateComponent from './components/RoomCreateComponent';
 
 class App extends Component{
 
@@ -30,7 +31,12 @@ class App extends Component{
             <Route path = "/" exact render = {(props) => (
               <MainComponent user = {this.state.user}/> )}>
             </Route>
+
+            <Route path = "/main" render = {(props) => (
+              <MainComponent user = {this.state.user}/> )}>
+            </Route>
             <Route path = "/room/:id" component = {RoomDetailComponent}></Route>
+            <Route path = "/createRoom" component = {RoomCreateComponent}></Route>
           </Switch>
         </div>
       </Router>

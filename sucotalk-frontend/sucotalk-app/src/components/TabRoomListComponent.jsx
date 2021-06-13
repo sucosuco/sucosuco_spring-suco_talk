@@ -15,12 +15,10 @@ class TabRoomListComponent extends Component {
 
     componentDidMount() {
         SucoTalkService.getMyRooms().then((res) => {
-            console.log('111 - ' +JSON.stringify(res.data))
             this.setState({myRooms: res.data});
         });
 
         SucoTalkService.getAccessibleRooms().then((res) => {
-            console.log('222 - ' + JSON.stringify(res.data))
             this.setState({accessibleRooms: res.data});
         });
 
