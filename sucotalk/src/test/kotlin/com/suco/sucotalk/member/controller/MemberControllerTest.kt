@@ -73,9 +73,11 @@ class MemberControllerTest {
             post("/member/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestMember))
-        ).andExpect(status().isOk).andReturn()
+        ).andExpect(status().isOk).andReturn().response
 
-        assertThat(response.request.session!!.getAttribute("login-user")).isEqualTo(requestMember.name)
+        val headerValue :String = response.getHeaderValue("Authorization").toString()
+        println("tokenValue : $headerValue")
+        assertThat(headerValue).isNotNull
     }
 
     @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 BadRequest 반환")
@@ -83,12 +85,18 @@ class MemberControllerTest {
     fun loginMemberWithInvalidUser() {
         val nonExistMember = Member(name = "nonExist", password = "invalid")
 
-        val response = mockMvc.perform(
+        mockMvc.perform(
             post("/member/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonExistMember))
         ).andExpect(status().isBadRequest).andReturn()
+    }
 
-        assertThat(response.request.session!!.getAttribute("login-user")).isNotEqualTo(requestMember.name)
+    @Test
+    fun findFriends() {
+    }
+
+    @Test
+    fun login() {
     }
 }

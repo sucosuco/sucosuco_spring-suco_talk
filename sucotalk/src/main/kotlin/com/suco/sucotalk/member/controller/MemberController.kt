@@ -1,17 +1,22 @@
 package com.suco.sucotalk.member.controller
 
+import com.suco.sucotalk.auth.dto.TokenResponse
+import com.suco.sucotalk.auth.service.AuthService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.dto.MemberDto
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.IllegalArgumentException
 import java.net.URI
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
 @CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 @RequestMapping("/member")
-class MemberController(private val memberService: MemberService, private val httpSession: HttpSession) {
+class MemberController(private val memberService: MemberService, private val authService: AuthService) {
 
     @GetMapping
     fun findAll(): ResponseEntity<List<Member>> {
@@ -19,9 +24,9 @@ class MemberController(private val memberService: MemberService, private val htt
     }
 
     @GetMapping("/friends")
-    fun findFriends(): ResponseEntity<List<Member>> {
-        val name = httpSession.getAttribute("login-user") as String
-        return ResponseEntity.ok(memberService.findFriends(name))
+    fun findFriends(httpServletRequest: HttpServletRequest): ResponseEntity<List<Member>> {
+        val userName = authService.getPayload(httpServletRequest)?:throw IllegalArgumentException("로그인 안된 사용자")
+        return ResponseEntity.ok(memberService.findFriends(userName))
     }
 
     @GetMapping("/{id}")
@@ -36,14 +41,16 @@ class MemberController(private val memberService: MemberService, private val htt
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: Member, httpSession: HttpSession): ResponseEntity<MemberDto> {
-        val memberDto = memberService.login(loginRequest)
-        httpSession.setAttribute("login-user", memberDto.name)
-        return ResponseEntity.ok(memberDto)
+    fun login(@RequestBody loginRequest: Member, response:HttpServletResponse): ResponseEntity<TokenResponse> {
+        val token :String? = authService.login(loginRequest)
+
+        //TODO :: token response, header or body
+        response.setHeader("Authorization", token)
+        return ResponseEntity.ok(TokenResponse(token))
     }
 
     @PostMapping("/logout")
-    fun login(httpSession: HttpSession): ResponseEntity<Unit> {
+    fun logout(httpSession: HttpSession): ResponseEntity<Unit> {
         httpSession.removeAttribute("login-user")
         return ResponseEntity.ok(Unit)
     }

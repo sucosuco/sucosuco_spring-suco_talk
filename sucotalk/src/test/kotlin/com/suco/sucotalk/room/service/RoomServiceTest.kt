@@ -69,12 +69,12 @@ class RoomServiceTest {
 
     private fun createRoom(members: List<Member>): Room {
         roomService.enterNewRoom(members.map { it.id })
-        return roomRepositoryImpl.findEnteredRoom(savedMember1).first()
+        return roomRepositoryImpl.findEnteredRooms(savedMember1).first()
     }
 
     private fun enterRoom(room: Room, member: Member): Room {
         roomService.enter(member.name, room.id!!)
-        return roomRepositoryImpl.findEnteredRoom(member).first()
+        return roomRepositoryImpl.findEnteredRooms(member).first()
     }
 
     private fun exitRoom(room: Room, member: Member): Room {
