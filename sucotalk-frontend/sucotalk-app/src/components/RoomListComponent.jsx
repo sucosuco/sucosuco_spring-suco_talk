@@ -16,7 +16,6 @@ class RoomListComponent extends Component {
                      <AllRoomListComponent/>
                 </div>
             )
-           
         }
         return (
             <div>

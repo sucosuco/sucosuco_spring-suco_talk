@@ -19,12 +19,10 @@ class CreateRoomList extends Component {
                     friends: res.data
                 }
             )
-
         });
     }
 
     createRoom() {
-        console.log('fsfsdfdsfdsfsa')
         const elements = document.getElementsByClassName('active');
         const ids = [];
         for (let i = 0; i < elements.length; i++) {
@@ -62,7 +60,6 @@ class CreateRoomList extends Component {
                     </div>
                 </div>
                 <ul class="list-group">
-                   
                     {
                          this.state.friends.map(
                             friend => 

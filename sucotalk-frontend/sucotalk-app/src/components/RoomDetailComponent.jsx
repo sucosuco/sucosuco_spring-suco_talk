@@ -30,6 +30,7 @@ class RoomDetailComponent extends Component {
             this.props.history.push('/');
         })
         .catch(error => {
+            alert(error.response.data.message)
             this.props.history.push('/');
         })
     }
