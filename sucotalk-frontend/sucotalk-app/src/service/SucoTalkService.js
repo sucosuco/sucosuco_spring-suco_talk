@@ -61,6 +61,18 @@ class SucoTalkService {
         });
     }
 
+    enterRoom(roomId) {
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'post',
+            url: BASE_URL + 'rooms/enter/'+roomId,
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
+    }
+
     exitRoom(roomId) {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({

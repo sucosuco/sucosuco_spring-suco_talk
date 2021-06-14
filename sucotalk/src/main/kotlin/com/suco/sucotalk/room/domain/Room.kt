@@ -8,6 +8,7 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
     val members: MutableList<Member> = members.toMutableList()
 
     fun enter(member: Member) {
+        require(!members.contains(member)){throw RoomException("이미 방에 존재하는 사용자입니다.")}
         members.add(member)
     }
 

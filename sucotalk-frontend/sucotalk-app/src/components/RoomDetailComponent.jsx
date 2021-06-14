@@ -24,6 +24,17 @@ class RoomDetailComponent extends Component {
         }); 
     }
 
+    enter() {
+        SucoTalkService.enterRoom(this.props.match.params.id).then(res => {
+            alert('들어가기 성공');
+            this.componentDidMount();
+        })
+        .catch(error => {
+            alert(error.response.data.message)
+            this.props.history.push('/');
+        })
+    }
+
     exit() {
         SucoTalkService.exitRoom(this.props.match.params.id).then(res => {
             alert('나가기 성공');
@@ -39,7 +50,7 @@ class RoomDetailComponent extends Component {
         return (
             <div>
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <h2>{this.state.room.name}</h2>
                         {
                             this.state.members.map (
@@ -48,8 +59,15 @@ class RoomDetailComponent extends Component {
                             )
                         }
                     </div>
+                    <div className="col-md-2">
+                        <button id="logInBtn" className="btn btn-primary btn-block" type="button"
+                                onClick={() => this.enter()}>들가기
+                        </button>
+                    </div>
                     <div class="col-md-2">
-                        <button id="logInBtn" class="btn btn-primary btn-block" type="button" onClick={() => this.exit()}>나가기</button>
+                        <button id="logInBtn" class="btn btn-primary btn-block" type="button"
+                                onClick={() => this.exit()}>나가기
+                        </button>
                     </div>
                 </div>
                 <div class="input-group">

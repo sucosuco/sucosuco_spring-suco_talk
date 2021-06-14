@@ -33,9 +33,13 @@ class CreateRoomList extends Component {
             members: ids
         }
 
-        SucoTalkService.createRoom(roomInfo);
-
-        this.props.history.push("/");
+        SucoTalkService.createRoom(roomInfo)
+            .then(res => {
+                this.props.history.push("/room/" + res.data.id);
+            })
+            .catch(error => {
+                alert(error)
+            })
     }
 
     changeNameHandler = (event) => {
