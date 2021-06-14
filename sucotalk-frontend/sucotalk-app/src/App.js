@@ -30,11 +30,11 @@ class App extends Component {
                 <Router>
                     <div className="container">
                         <Switch>
-                            <Route path="/" exact render={(props) => (
+                            <Route path="/" exact render={() => (
                                 <MainComponent user={this.state.user}/>)}>
                             </Route>
 
-                            <Route path="/main" render={(props) => (
+                            <Route path="/main" render={() => (
                                 <MainComponent user={this.state.user}/>)}>
                             </Route>
                             <Route path="/room/:id" component={RoomDetailComponent}></Route>

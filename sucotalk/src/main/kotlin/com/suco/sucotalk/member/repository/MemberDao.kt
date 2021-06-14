@@ -52,7 +52,7 @@ class MemberDao(
         }
     }
 
-    fun findByIds(participants: List<Long>): MutableList<Member> {
+    fun findByIds(participants: List<Long>): List<Member> {
         val parameters = MapSqlParameterSource("ids", participants)
         val sql = "SELECT * FROM MEMBER WHERE id IN (:ids)"
 

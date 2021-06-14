@@ -38,7 +38,7 @@ class MessageServiceTest {
         val memberId2 = memberDao.insert(Member("test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
-        val roomId = roomDao.create(Room(members = mutableListOf(testMember1, testMember2)))
+        val roomId = roomDao.create(Room("testRoom",listOf(testMember1, testMember2)))
         testRoom = roomDao.findById(roomId)
 
         roomDao.saveParticipants(testRoom)

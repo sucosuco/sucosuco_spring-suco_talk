@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import SucoTalkService from '../service/SucoTalkService';
 
-
 class RoomDetailComponent extends Component {
 
     constructor(props) {
@@ -25,24 +24,24 @@ class RoomDetailComponent extends Component {
     }
 
     enter() {
-        SucoTalkService.enterRoom(this.props.match.params.id).then(res => {
+        SucoTalkService.enterRoom(this.props.match.params.id).then(() => {
             alert('들어가기 성공');
             this.componentDidMount();
         })
         .catch(error => {
             alert(error.response.data.message)
-            this.props.history.push('/');
+            this.componentDidMount();
         })
     }
 
     exit() {
-        SucoTalkService.exitRoom(this.props.match.params.id).then(res => {
+        SucoTalkService.exitRoom(this.props.match.params.id).then(() => {
             alert('나가기 성공');
             this.props.history.push('/');
         })
         .catch(error => {
             alert(error.response.data.message)
-            this.props.history.push('/');
+            this.componentDidMount();
         })
     }
 

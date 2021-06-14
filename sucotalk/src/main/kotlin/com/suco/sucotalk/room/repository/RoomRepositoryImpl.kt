@@ -17,7 +17,7 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     fun findById(id: Long): Room {
         val room: Room = roomDao.findById(id)
         val participants: List<Long> = roomDao.findParticipantsById(id)
-        val members: MutableList<Member> = memberDao.findByIds(participants)
+        val members: List<Member> = memberDao.findByIds(participants)
         return Room(room.id, room.name, members)
     }
 
