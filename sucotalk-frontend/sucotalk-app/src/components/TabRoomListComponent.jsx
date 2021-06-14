@@ -21,8 +21,6 @@ class TabRoomListComponent extends Component {
         SucoTalkService.getAccessibleRooms().then((res) => {
             this.setState({accessibleRooms: res.data});
         });
-
-        
     }
 
     enterRoom(roomId) {

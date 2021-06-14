@@ -46,7 +46,8 @@ class App extends Component{
 
   login = (loginInfo) => {
     SucoTalkService.login(loginInfo).then(res => {
-      localStorage.setItem("authorization", res.headers["Authorization"])
+
+      localStorage.setItem("authorization", res.headers["authorization"])
       this.setState({
         user: res.data
       })
