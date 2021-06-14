@@ -41,12 +41,10 @@ class MemberController(private val memberService: MemberService, private val aut
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: Member, response:HttpServletResponse): ResponseEntity<TokenResponse> {
+    fun login(@RequestBody loginRequest: Member, response:HttpServletResponse): ResponseEntity<MemberDto> {
         val token :String? = authService.login(loginRequest)
-
-        //TODO :: token response, header or body
-        response.setHeader("Authorization", token)
-        return ResponseEntity.ok(TokenResponse(token))
+        response.addHeader("Authorization", token)
+        return ResponseEntity.ok(MemberDto.of(loginRequest))
     }
 
     @PostMapping("/logout")

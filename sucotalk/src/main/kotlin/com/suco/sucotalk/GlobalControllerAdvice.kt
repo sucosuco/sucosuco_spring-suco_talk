@@ -15,11 +15,11 @@ class GlobalControllerAdvice {
         val exceptionResponse = ExceptionResponseDto(e.message)
         return ResponseEntity.badRequest().body(exceptionResponse)
     }
-
-    @ExceptionHandler(Exception::class)
-    fun handlerUnhandledException(): ResponseEntity<ExceptionResponseDto> {
-        val message = "Oop.. There's unhandled exception"
-        val exceptionResponse = ExceptionResponseDto(message)
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse)
-    }
+//
+//    @ExceptionHandler(Exception::class)
+//    fun handlerUnhandledException(): ResponseEntity<ExceptionResponseDto> {
+//        val message = "Oop.. There's unhandled exception"
+//        val exceptionResponse = ExceptionResponseDto(message)
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse)
+//    }
 }

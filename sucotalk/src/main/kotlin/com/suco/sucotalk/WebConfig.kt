@@ -10,5 +10,6 @@ class WebConfig :WebMvcConfigurer{
         registry.addMapping("/**")
             .allowedOrigins("http://localhost:8080", "http://localhost:3000")
             .allowCredentials(true)
+            .exposedHeaders("Authorization")
     }
 }
