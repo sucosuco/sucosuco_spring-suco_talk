@@ -74,7 +74,7 @@ class SucoTalkService {
     }
 
     login(loginInfo) {
-        return axios.post(BASE_URL + 'member/login/', loginInfo, { withCredentials: true });
+        return axios.post(BASE_URL + 'login/', loginInfo, { withCredentials: true });
     }
 
     logout() {

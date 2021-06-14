@@ -13,7 +13,6 @@ class CreateRoomList extends Component {
 
     componentDidMount() {
         SucoTalkService.getFriends().then(res => {
-            console.log(JSON.stringify(res.data))
             this.setState(
                 {
                     friends: res.data
