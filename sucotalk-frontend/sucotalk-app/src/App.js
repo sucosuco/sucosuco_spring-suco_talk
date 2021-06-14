@@ -18,7 +18,9 @@ class App extends Component {
     }
 
     componentDidMount() {
-        //토큰을 바탕으로 로그인 체크
+        SucoTalkService.isLogged().then(res => {
+            this.setState({user: res.data})
+        })
     }
 
     render() {

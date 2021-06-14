@@ -92,5 +92,17 @@ class SucoTalkService {
     logout() {
         localStorage.removeItem("authorization")
     }
+
+    isLogged() {
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'get',
+            url: BASE_URL + 'member/me',
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
+    }
 }
 export default new SucoTalkService();

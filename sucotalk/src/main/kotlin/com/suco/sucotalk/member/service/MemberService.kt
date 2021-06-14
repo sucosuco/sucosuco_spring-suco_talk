@@ -37,4 +37,9 @@ class MemberService(private val memberDao: MemberDao) {
             }
             .collect(Collectors.toList())
     }
+
+    fun findByName(userName: String): MemberDto {
+        val user = memberDao.findByName(userName)
+        return MemberDto.of(user)
+    }
 }
