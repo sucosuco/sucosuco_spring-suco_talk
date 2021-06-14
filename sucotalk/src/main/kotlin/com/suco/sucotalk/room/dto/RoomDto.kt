@@ -4,7 +4,7 @@ import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
 import java.util.stream.Collectors
 
-data class RoomDto(val id: Long?, val name: String, val members:List<Member>) {
+data class RoomDto(val id: Long?, val name: String, val members: List<Member>) {
 
     companion object {
         fun of(room: Room): RoomDto {
@@ -13,8 +13,8 @@ data class RoomDto(val id: Long?, val name: String, val members:List<Member>) {
 
         fun listOf(rooms: List<Room>): List<RoomDto> {
             return rooms.stream()
-                    .map { of(it) }
-                    .collect(Collectors.toList())
+                .map { of(it) }
+                .collect(Collectors.toList())
         }
     }
 }

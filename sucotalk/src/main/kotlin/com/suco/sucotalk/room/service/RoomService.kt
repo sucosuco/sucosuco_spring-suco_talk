@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class RoomService(
-        private val messageService: MessageService,
-        private val roomRepositoryImpl: RoomRepositoryImpl,
-        private val memberDao: MemberDao
+    private val messageService: MessageService,
+    private val roomRepositoryImpl: RoomRepositoryImpl,
+    private val memberDao: MemberDao
 ) {
 
     fun rooms(): List<RoomDto> {
@@ -76,7 +76,7 @@ class RoomService(
 
     fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
         val dmRoom = findDirectRoom(sender, receiver)
-                ?: createNewRoom(mutableListOf(sender, receiver))
+            ?: createNewRoom(mutableListOf(sender, receiver))
 
         sendMessage(sender, dmRoom, message)
     }

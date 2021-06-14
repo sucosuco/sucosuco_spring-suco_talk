@@ -25,7 +25,7 @@ class JwtTokenProvider {
             .compact()
     }
 
-    fun getPayload(token: String?): String? {
+    fun getPayload(token: String?): String {
         validateToken(token)
         return Jwts.parser()
             .setSigningKey(secretKey)

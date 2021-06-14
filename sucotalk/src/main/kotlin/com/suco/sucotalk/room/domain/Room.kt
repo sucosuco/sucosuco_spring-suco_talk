@@ -12,7 +12,7 @@ class Room(val id: Long? = null, val name: String = "", members: List<Member> = 
     }
 
     fun exit(member: Member) {
-        require(members.contains(member)){ throw RoomException("방에 존재하지 않는 사용자입니다.") }
+        require(members.contains(member)) { throw RoomException("방에 존재하지 않는 사용자입니다.") }
         members.remove(member)
     }
 

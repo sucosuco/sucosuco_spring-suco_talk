@@ -1,5 +1,6 @@
 package com.suco.sucotalk
 
+import com.suco.sucotalk.auth.exception.AuthException
 import com.suco.sucotalk.member.exception.MemberException
 import com.suco.sucotalk.room.exception.RoomException
 import org.springframework.http.HttpStatus
@@ -11,7 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class GlobalControllerAdvice {
 
     @ExceptionHandler(MemberException::class, RoomException::class)
-    fun handleMemberException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
+    fun handleDomainException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
+        val exceptionResponse = ExceptionResponseDto(e.message)
+        return ResponseEntity.badRequest().body(exceptionResponse)
+    }
+
+    @ExceptionHandler(AuthException::class)
+    fun handleAuthorizationException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
         val exceptionResponse = ExceptionResponseDto(e.message)
         return ResponseEntity.badRequest().body(exceptionResponse)
     }
