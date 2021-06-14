@@ -12,26 +12,30 @@ import org.springframework.stereotype.Component
 
 @Component
 @Profile("!test")
-class DataLoader(private val roomDao: RoomDao, private val memberService: MemberService, private val messageDao: MessageDao) : CommandLineRunner {
+class DataLoader(
+    private val roomDao: RoomDao,
+    private val memberService: MemberService,
+    private val messageDao: MessageDao
+) : CommandLineRunner {
 
     override fun run(vararg args: String) {
-        val corgiId :Long = memberService.createMember("corgi", "1234")
-        val suriId :Long = memberService.createMember("suri", "1234")
-        val jinhwanId :Long = memberService.createMember("jinhwan", "1234")
-        val dawonId :Long = memberService.createMember("dawon", "1234")
+        val corgiId: Long = memberService.createMember("corgi", "1234")
+        val suriId: Long = memberService.createMember("suri", "1234")
+        val jinhwanId: Long = memberService.createMember("jinhwan", "1234")
+        val dawonId: Long = memberService.createMember("dawon", "1234")
 
-        val corgi : Member = memberService.findById(corgiId)
-        val suri :Member = memberService.findById(suriId)
-        val jinhwan :Member = memberService.findById(jinhwanId)
-        val dawon :Member = memberService.findById(dawonId)
+        val corgi: Member = memberService.findById(corgiId)
+        val suri: Member = memberService.findById(suriId)
+        val jinhwan: Member = memberService.findById(jinhwanId)
+        val dawon: Member = memberService.findById(dawonId)
 
-        val room1Id :Long = roomDao.create(Room(name = "room1", members = listOf(corgi, suri)))
-        val room2Id :Long = roomDao.create(Room(name = "room2", members = listOf(corgi, suri, jinhwan)))
-        val room3Id :Long = roomDao.create(Room(name = "room3", members = listOf(suri, dawon)))
+        val room1Id: Long = roomDao.create(Room(name = "room1", members = listOf(corgi, suri)))
+        val room2Id: Long = roomDao.create(Room(name = "room2", members = listOf(corgi, suri, jinhwan)))
+        val room3Id: Long = roomDao.create(Room(name = "room3", members = listOf(suri, dawon)))
 
-        val room1 :Room = roomDao.findById(room1Id)
-        val room2 :Room = roomDao.findById(room2Id)
-        val room3 :Room = roomDao.findById(room3Id)
+        val room1: Room = roomDao.findById(room1Id)
+        val room2: Room = roomDao.findById(room2Id)
+        val room3: Room = roomDao.findById(room3Id)
 
         val message1 = Message(sender = corgi, room = room1, content = "hi")
         val message2 = Message(sender = suri, room = room1, content = "hey")

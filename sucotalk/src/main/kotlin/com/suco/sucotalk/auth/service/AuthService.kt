@@ -19,10 +19,10 @@ class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val me
     }
 
     fun getPayload(httpServletRequest: HttpServletRequest): String {
-        try{
+        try {
             val token = AuthorizationExtractor.extract(httpServletRequest)
             return jwtTokenProvider.getPayload(token)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             throw AuthException("로그인된 사용자가 아닙니다.")
         }
     }

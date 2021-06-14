@@ -1,6 +1,5 @@
 package com.suco.sucotalk.auth.controller
 
-import com.suco.sucotalk.auth.exception.AuthException
 import com.suco.sucotalk.auth.service.AuthService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.dto.MemberDto
