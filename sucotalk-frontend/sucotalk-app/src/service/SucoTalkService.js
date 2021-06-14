@@ -16,7 +16,7 @@ class SucoTalkService {
         return axios.get(BASE_URL + 'rooms/accessible', { withCredentials: true });
     }
 
-    getRoomDeatail(roomId) {
+    getRoomDetail(roomId) {
         return axios.get(BASE_URL + 'rooms/detail/' + roomId);
     }
 
@@ -29,7 +29,7 @@ class SucoTalkService {
     }
 
     exitRoom(roomId) {
-        return axios.post(BASE_URL + 'rooms/exit/' + roomId);
+        return axios.post(BASE_URL + 'rooms/exit/' + roomId, {withCredentials: true});
     }
 
     login(loginInfo) {

@@ -46,6 +46,7 @@ class App extends Component{
 
   login = (loginInfo) => {
     SucoTalkService.login(loginInfo).then(res => {
+      console.log(res)
       this.setState({
         user: res.data
       })

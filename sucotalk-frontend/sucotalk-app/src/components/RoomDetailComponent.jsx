@@ -15,7 +15,7 @@ class RoomDetailComponent extends Component {
     }
 
     componentDidMount() {
-        SucoTalkService.getRoomDeatail(this.props.match.params.id).then((res) => {
+        SucoTalkService.getRoomDetail(this.props.match.params.id).then((res) => {
             this.setState({  
                 room: res.data.room,
                 members: res.data.room.members,
