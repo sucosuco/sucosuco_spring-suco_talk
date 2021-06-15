@@ -38,7 +38,11 @@ class CreateRoomList extends Component {
                 this.props.history.push("/room/" + res.data.id);
             })
             .catch(error => {
-                alert(error)
+                if(error.response.data.message != null){
+                    alert(error.response.data.message)
+                } else{
+                    alert(error)
+                }
             })
     }
 
