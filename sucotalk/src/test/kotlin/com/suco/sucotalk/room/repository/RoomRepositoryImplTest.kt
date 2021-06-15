@@ -32,13 +32,13 @@ class RoomRepositoryImplTest {
         val memberId2 = memberDao.insert(Member(name = "test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
-        roomRepositoryImpl.save(Room(members = mutableListOf(testMember1, testMember2)))
+        roomRepositoryImpl.save(Room("testRoom", listOf(testMember1, testMember2)))
     }
 
     @DisplayName("유저가 입장해 있는 룸을 찾는다.")
     @Test
     fun findById() {
-        val findEnteredRoom = roomRepositoryImpl.findEnteredRoom(testMember1)
+        val findEnteredRoom = roomRepositoryImpl.findEnteredRooms(testMember1)
 
         assertThat(findEnteredRoom.size == 1)
         assertThat(findEnteredRoom.first().members.map { it.id })

@@ -62,33 +62,40 @@ class MemberControllerTest {
             post("/member")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(Member(name = "test2", password = "test2")))
-        )
-            .andExpect(status().isCreated)
+        ).andExpect(status().isCreated)
     }
 
-    @DisplayName("로그인 요청을 수행한다. :: 올바른 유저일 경우 세션을 저장")
+    @DisplayName("로그인 요청을 수행한다. :: 올바른 유저일 경우 토큰을 반환")
     @Test
     fun loginMember() {
-        val response = mockMvc.perform(
-            post("/member/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestMember))
-        ).andExpect(status().isOk).andReturn()
-
-        assertThat(response.request.session!!.getAttribute("login-user")).isEqualTo(requestMember.name)
+        val response = requestLogin(requestMember).andExpect(status().isOk).andReturn().response
+        assertThat(response.getHeaderValue("Authorization")).isNotNull
     }
 
     @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 BadRequest 반환")
     @Test
     fun loginMemberWithInvalidUser() {
         val nonExistMember = Member(name = "nonExist", password = "invalid")
-
-        val response = mockMvc.perform(
-            post("/member/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(nonExistMember))
-        ).andExpect(status().isBadRequest).andReturn()
-
-        assertThat(response.request.session!!.getAttribute("login-user")).isNotEqualTo(requestMember.name)
+        requestLogin(nonExistMember).andExpect(status().isBadRequest)
     }
+
+    @DisplayName("유저 정보가 필요한 요청을 수행한다 :: 로그인 토큰이 있는 경우")
+    @Test
+    fun checkUserToken() {
+        val response = requestLogin(requestMember).andReturn().response
+        val userToken: String = response.getHeaderValue("Authorization").toString()
+
+        mockMvc.perform(
+            get("/rooms/my")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer $userToken")
+        )
+            .andExpect(status().isOk)
+    }
+
+    private fun requestLogin(requestMember: Member) = mockMvc.perform(
+        post("/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(requestMember))
+    )
 }

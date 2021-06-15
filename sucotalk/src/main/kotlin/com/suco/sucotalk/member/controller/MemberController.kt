@@ -1,32 +1,21 @@
 package com.suco.sucotalk.member.controller
 
+import com.suco.sucotalk.auth.service.AuthService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.dto.MemberDto
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
-import javax.servlet.http.HttpSession
+import javax.servlet.http.HttpServletRequest
 
-@CrossOrigin(origins = ["http://localhost:3000"])
 @RestController
 @RequestMapping("/member")
-class MemberController(private val memberService: MemberService, private val httpSession: HttpSession) {
+class MemberController(private val memberService: MemberService, private val authService: AuthService) {
 
     @GetMapping
     fun findAll(): ResponseEntity<List<Member>> {
         return ResponseEntity.ok(memberService.findAll())
-    }
-
-    @GetMapping("/friends")
-    fun findFriends(): ResponseEntity<List<Member>> {
-        val name = httpSession.getAttribute("login-user") as String
-        return ResponseEntity.ok(memberService.findFriends(name))
-    }
-
-    @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<Member> {
-        return ResponseEntity.ok(memberService.findById(id))
     }
 
     @PostMapping
@@ -35,16 +24,20 @@ class MemberController(private val memberService: MemberService, private val htt
         return ResponseEntity.created(URI.create("/member/$createMemberId")).build()
     }
 
-    @PostMapping("/login")
-    fun login(@RequestBody loginRequest: Member, httpSession: HttpSession): ResponseEntity<MemberDto> {
-        val memberDto = memberService.login(loginRequest)
-        httpSession.setAttribute("login-user", memberDto.name)
-        return ResponseEntity.ok(memberDto)
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: Long): ResponseEntity<Member> {
+        return ResponseEntity.ok(memberService.findById(id))
     }
 
-    @PostMapping("/logout")
-    fun login(httpSession: HttpSession): ResponseEntity<Unit> {
-        httpSession.removeAttribute("login-user")
-        return ResponseEntity.ok(Unit)
+    @GetMapping("/me")
+    fun findByToken(request: HttpServletRequest): ResponseEntity<MemberDto> {
+        val userName = authService.getPayload(request)
+        return ResponseEntity.ok(memberService.findByName(userName))
+    }
+
+    @GetMapping("/friends")
+    fun findFriends(request: HttpServletRequest): ResponseEntity<List<Member>> {
+        val userName = authService.getPayload(request)
+        return ResponseEntity.ok(memberService.findFriends(userName))
     }
 }

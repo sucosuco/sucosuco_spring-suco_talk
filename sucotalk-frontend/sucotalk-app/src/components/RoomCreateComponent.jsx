@@ -13,18 +13,15 @@ class CreateRoomList extends Component {
 
     componentDidMount() {
         SucoTalkService.getFriends().then(res => {
-            console.log(JSON.stringify(res.data))
             this.setState(
                 {
                     friends: res.data
                 }
             )
-
         });
     }
 
     createRoom() {
-        console.log('fsfsdfdsfdsfsa')
         const elements = document.getElementsByClassName('active');
         const ids = [];
         for (let i = 0; i < elements.length; i++) {
@@ -36,9 +33,13 @@ class CreateRoomList extends Component {
             members: ids
         }
 
-        SucoTalkService.createRoom(roomInfo);
-
-        this.props.history.push("/");
+        SucoTalkService.createRoom(roomInfo)
+            .then(res => {
+                this.props.history.push("/room/" + res.data.id);
+            })
+            .catch(error => {
+                alert(error)
+            })
     }
 
     changeNameHandler = (event) => {
@@ -62,7 +63,6 @@ class CreateRoomList extends Component {
                     </div>
                 </div>
                 <ul class="list-group">
-                   
                     {
                          this.state.friends.map(
                             friend => 

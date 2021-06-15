@@ -3,7 +3,6 @@ package com.suco.sucotalk.room.repository
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
-import com.suco.sucotalk.room.dto.RoomDetail
 import org.springframework.stereotype.Repository
 import java.util.stream.Collectors
 
@@ -18,13 +17,13 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     fun findById(id: Long): Room {
         val room: Room = roomDao.findById(id)
         val participants: List<Long> = roomDao.findParticipantsById(id)
-        val members: MutableList<Member> = memberDao.findByIds(participants)
+        val members: List<Member> = memberDao.findByIds(participants)
         return Room(room.id, room.name, members)
     }
 
     fun findAll(): List<Room> {
         val rooms = roomDao.getAllRoom()
-        return rooms.map{ findById(it.id!!)}
+        return rooms.map { findById(it.id!!) }
     }
 
     fun findEnteredRooms(member: Member): List<Room> {
@@ -37,8 +36,8 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         val ids = roomDao.findRoomByMember(member)
 
         return rooms.stream()
-                .filter { room -> !ids.contains(room.id) }
-                .collect(Collectors.toList())
+            .filter { room -> !ids.contains(room.id) }
+            .collect(Collectors.toList())
     }
 
     fun deleteMemberInRoom(room: Room, member: Member) {

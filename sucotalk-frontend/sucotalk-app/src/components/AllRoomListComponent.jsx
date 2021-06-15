@@ -22,7 +22,6 @@ class AllRoomListComponent extends Component {
         this.props.history.push(`/room/${roomId}`)
     }
 
-
     render() {
         return (
             <div>

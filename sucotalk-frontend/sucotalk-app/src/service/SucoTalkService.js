@@ -9,36 +9,100 @@ class SucoTalkService {
     }
 
     getMyRooms() {
-        return axios.get(BASE_URL + 'rooms/my', { withCredentials: true });
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'get',
+            url: BASE_URL + 'rooms/my',
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 
     getAccessibleRooms() {
-        return axios.get(BASE_URL + 'rooms/accessible', { withCredentials: true });
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'get',
+            url: BASE_URL + 'rooms/accessible',
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 
-    getRoomDeatail(roomId) {
+    getRoomDetail(roomId) {
         return axios.get(BASE_URL + 'rooms/detail/' + roomId);
     }
 
     getFriends() {
-        return axios.get(BASE_URL + 'member/friends', { withCredentials: true });
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'get',
+            url: BASE_URL + 'member/friends',
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 
-
     createRoom(roomInfo) {
-        return axios.post(BASE_URL + 'rooms', roomInfo, { withCredentials: true });
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'post',
+            url: BASE_URL + 'rooms',
+            headers :{
+                Authorization: auth_token,
+            },
+            data : roomInfo,
+            withCredentials: true,
+        });
+    }
+
+    enterRoom(roomId) {
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'post',
+            url: BASE_URL + 'rooms/enter/'+roomId,
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 
     exitRoom(roomId) {
-        return axios.post(BASE_URL + 'rooms/exit/' + roomId);
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'post',
+            url: BASE_URL + 'rooms/exit/' + roomId,
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 
     login(loginInfo) {
-        return axios.post(BASE_URL + '/member/login/', loginInfo, { withCredentials: true });
+        return axios.post(BASE_URL + 'login/', loginInfo, { withCredentials: true });
     }
 
     logout() {
-        return axios.post(BASE_URL + '/member/logout/')
+        localStorage.removeItem("authorization")
+    }
+
+    isLogged() {
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        return axios({
+            method: 'get',
+            url: BASE_URL + 'member/me',
+            headers :{
+                Authorization: auth_token,
+            },
+            withCredentials: true,
+        });
     }
 }
 export default new SucoTalkService();

@@ -58,7 +58,6 @@ class LoginComponent extends Component {
                     <button className="btn btn-success mt-1" onClick={this.props.logout}>Logout</button>
                 </div>
             </div>
-            
         );   
     }
 }

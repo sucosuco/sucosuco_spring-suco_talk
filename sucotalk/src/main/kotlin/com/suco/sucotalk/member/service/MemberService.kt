@@ -30,11 +30,16 @@ class MemberService(private val memberDao: MemberDao) {
         return memberDao.findAll()
     }
 
-    fun findFriends(userName:String) : List<Member>? {
-       return memberDao.findAll().stream()
-               .filter {
-                   member -> member.name != userName
-               }
-               .collect(Collectors.toList())
+    fun findFriends(userName: String): List<Member>? {
+        return memberDao.findAll().stream()
+            .filter { member ->
+                member.name != userName
+            }
+            .collect(Collectors.toList())
+    }
+
+    fun findByName(userName: String): MemberDto {
+        val user = memberDao.findByName(userName)
+        return MemberDto.of(user)
     }
 }

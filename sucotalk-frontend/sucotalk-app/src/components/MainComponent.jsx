@@ -26,7 +26,8 @@ class MainComponent extends Component {
     render() {
         return(
             <div>
-                <button id="createRoomBtn" class="btn btn-primary" type="button" onClick = {(e) => this.createRoom(e)}>채팅방 개설</button>
+                <button id="createRoomBtn" class="btn btn-primary" type="button"
+                        onClick = {(e) => this.createRoom(e)}>채팅방 개설</button>
                 <RoomListComponent user = {this.props.user}/>
             </div>
         );

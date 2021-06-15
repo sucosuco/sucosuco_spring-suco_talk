@@ -18,7 +18,6 @@ class HeaderComponent extends Component {
                         <div class="container-fluid"><a href="https://localhost:3000" className="navbar-brand"> SucoSuco</a></div>
                         <LoginComponent user = {this.props.user} login = {this.props.login} logout = {this.props.logout}/>
                     </nav>
-                   
                 </header>
             </div>
         );
