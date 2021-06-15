@@ -9,6 +9,7 @@ import com.suco.sucotalk.room.domain.RoomInfo
 import com.suco.sucotalk.room.dto.RoomApproximate
 import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomRequest
+import com.suco.sucotalk.room.exception.RoomException
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
@@ -64,11 +65,12 @@ class RoomService(
     }
 
     fun createRoom(masterName: String, roomInfo: RoomRequest): RoomApproximate {
-        val master = memberDao.findByName(masterName);
+        val master = memberDao.findByName(masterName)
         val members = memberDao.findByIds(roomInfo.members).plus(master)
+        val room = Room(roomInfo.name, members)
 
-        val savedRoom = roomRepositoryImpl.save(Room(roomInfo.name, members))
-        return RoomApproximate.of(savedRoom)
+        require(!roomRepositoryImpl.isExisting(room)) { throw RoomException("중복된 이름의 방을 생성할 수 없습니다.") }
+        return RoomApproximate.of(roomRepositoryImpl.save(room))
     }
 
     private fun createNewRoom(members: List<Member>): Room {

@@ -22,6 +22,10 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         return Room(room.id, room.name, members)
     }
 
+    fun isExisting(room: Room) : Boolean{
+        return roomDao.isExistingName(room.name)
+    }
+
     fun findAll(): List<Room> {
         val rooms = roomDao.getAllRoom()
         return rooms.map { findById(it.id!!) }

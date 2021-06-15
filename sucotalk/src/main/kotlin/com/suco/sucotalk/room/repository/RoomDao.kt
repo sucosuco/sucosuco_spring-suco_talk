@@ -47,10 +47,11 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
         try {
             return jdbcTemplate.queryForObject(sql, { rs, rn ->
-                RoomInfo(rs.getLong("id"), rs.getString("name"))}, id)!!
+                RoomInfo(rs.getLong("id"), rs.getString("name"))
+            }, id)!!
         } catch (e: EmptyResultDataAccessException) {
             throw IllegalArgumentException("등록되지 않은 방입니다.")
-        } catch (e : Exception){
+        } catch (e: Exception) {
             throw SQLException("error with jdbcTemplate")
         }
     }
@@ -77,5 +78,10 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
     fun insertMemberInRoom(room: Room, member: Member) {
         val sql = "INSERT INTO PARTICIPANTS (member_id, room_id) VALUES (?, ?)"
         jdbcTemplate.update(sql, member.id, room.id)
+    }
+
+    fun isExistingName(name: String): Boolean {
+        val sql = "SELECT EXISTS (SELECT id from ROOM WHERE name = ?)"
+        return jdbcTemplate.queryForObject(sql, Boolean::class.java, name)
     }
 }
