@@ -5,6 +5,8 @@ import com.suco.sucotalk.member.exception.MemberException
 import com.suco.sucotalk.room.exception.RoomException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
@@ -20,6 +22,13 @@ class GlobalControllerAdvice {
     @ExceptionHandler(AuthException::class)
     fun handleAuthorizationException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
         val exceptionResponse = ExceptionResponseDto(e.message)
+        return ResponseEntity.badRequest().body(exceptionResponse)
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleInvalidRequestArgument(bindingResult: BindingResult): ResponseEntity<ExceptionResponseDto> {
+        val message = bindingResult.fieldError?.defaultMessage
+        val exceptionResponse = ExceptionResponseDto(message)
         return ResponseEntity.badRequest().body(exceptionResponse)
     }
 

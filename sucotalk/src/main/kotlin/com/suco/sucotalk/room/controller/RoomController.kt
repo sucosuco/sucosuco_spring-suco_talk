@@ -7,9 +7,11 @@ import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomDto
 import com.suco.sucotalk.room.service.RoomService
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import javax.servlet.http.HttpServletRequest
+import javax.validation.Valid
 
 // TODO :: CORS 설정 방식
 @CrossOrigin(origins = ["http://localhost:3000"])
@@ -27,7 +29,11 @@ class RoomController(private val roomService: RoomService, private val authServi
     }
 
     @PostMapping("/rooms")
-    fun createNewRoom(@RequestBody roomInfo: RoomCreateRequest, request: HttpServletRequest): ResponseEntity<RoomCreateResponse>? {
+    fun createNewRoom(@Valid @RequestBody roomInfo: RoomCreateRequest, request: HttpServletRequest, bindingResult: BindingResult): ResponseEntity<RoomCreateResponse>? {
+        if(bindingResult.hasErrors()){
+            println("sadf")
+        }
+
         val userName = authService.getPayload(request)
         val room: RoomCreateResponse = roomService.createRoom(userName, roomInfo)
         return ResponseEntity.created(URI.create("/rooms/" + room.id)).body(room);

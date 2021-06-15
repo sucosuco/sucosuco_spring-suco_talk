@@ -26,6 +26,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	implementation ("org.springframework.boot:spring-boot-starter-freemarker")
