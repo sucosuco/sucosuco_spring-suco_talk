@@ -15,7 +15,8 @@ class MessageService(private val roomRepository: RoomRepositoryImpl, private val
     fun save(sendMessage: SendMessageDto): MessageDto {
         val room = roomRepository.findById(sendMessage.roomId)
         val sender = memberDao.findByName(sendMessage.senderName!!)
-        val message = Message(room = room, sender = sender, content = sendMessage.contents, time = sendMessage.sendTime);
+//        val message = Message(room = room, sender = sender, content = sendMessage.contents, time = sendMessage.sendTime);
+        val message = Message(room = room, sender = sender, content = sendMessage.contents)
         return MessageDto.of(messageDao.save(message))
     }
 

@@ -45,8 +45,7 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
         try {
             return jdbcTemplate.queryForObject(sql, { rs, rn ->
-                Room(rs.getLong("id"), rs.getString("name"))
-            }, id)!!
+                Room(rs.getLong("id"), rs.getString("name")) }, id)!!
         } catch (e: EmptyResultDataAccessException) {
             throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
         }

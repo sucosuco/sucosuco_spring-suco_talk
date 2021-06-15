@@ -25,14 +25,14 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
         return Message(id, message.sender, message.room, message.content, message.time)
     }
 
+    // TODO :: join 문 복습
     fun findByRoom(room: Room): List<Message> {
-        val sql =
-            "SELECT MS.id, MS.contents, MS.send_time, ME.id as member_id, ME.name FROM MEMBER as ME JOIN MESSAGE as MS ON ME.id = MS.sender_id WHERE MS.room_id = ?"
+        val sql = "SELECT MS.id, MS.contents, MS.send_time, ME.id as member_id, ME.name, ME.password FROM MEMBER as ME JOIN MESSAGE as MS ON ME.id = MS.sender_id WHERE MS.room_id = ?"
 
         return jdbcTemplate.query(sql, { rs, rn ->
             Message(
                 id = rs.getLong("id"),
-                sender = Member(rs.getLong("member_id"), rs.getString("name")),
+                sender = Member(rs.getLong("member_id"), rs.getString("name"), rs.getString("password")),
                 room = room,
                 content = rs.getString("contents"),
                 time = rs.getTimestamp("send_time").toString()

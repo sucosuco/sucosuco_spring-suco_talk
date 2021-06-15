@@ -33,7 +33,10 @@ class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handlerUnhandledException(): ResponseEntity<ExceptionResponseDto> {
+    fun handlerUnhandledException(e:Exception): ResponseEntity<ExceptionResponseDto> {
+        // TODO :: logger 적용
+        println("====ERROR ::" +e.message)
+
         val message = "Oop.. There's unhandled exception"
         val exceptionResponse = ExceptionResponseDto(message)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse)

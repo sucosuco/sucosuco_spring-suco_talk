@@ -1,6 +1,5 @@
 package com.suco.sucotalk.room.service
 
-import com.suco.sucotalk.chat.domain.Message
 import com.suco.sucotalk.chat.dto.MessageDto
 import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
@@ -9,7 +8,7 @@ import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
 import com.suco.sucotalk.room.dto.RoomDetail
-import com.suco.sucotalk.room.dto.RoomDto
+import com.suco.sucotalk.room.dto.RoomInformation
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
@@ -20,21 +19,21 @@ class RoomService(
     private val memberDao: MemberDao
 ) {
 
-    fun rooms(): List<RoomDto> {
+    fun rooms(): List<RoomInformation> {
         val rooms = roomRepositoryImpl.findAll()
-        return RoomDto.listOf(rooms)
+        return RoomInformation.listOf(rooms)
     }
 
-    fun myRooms(userName: String): List<RoomDto> {
+    fun myRooms(userName: String): List<RoomInformation> {
         val user = memberDao.findByName(userName);
         val rooms = roomRepositoryImpl.findEnteredRooms(user)
-        return RoomDto.listOf(rooms)
+        return RoomInformation.listOf(rooms)
     }
 
-    fun accessibleRooms(userName: String): List<RoomDto> {
+    fun accessibleRooms(userName: String): List<RoomInformation> {
         val user = memberDao.findByName(userName);
         val rooms = roomRepositoryImpl.findAccessibleRooms(user)
-        return RoomDto.listOf(rooms)
+        return RoomInformation.listOf(rooms)
     }
 
     fun exit(memberName: String, roomId: Long) {
