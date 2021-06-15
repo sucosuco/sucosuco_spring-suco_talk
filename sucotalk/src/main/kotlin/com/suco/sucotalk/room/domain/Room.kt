@@ -12,8 +12,7 @@ class Room(val id: Long?, val name: String, members: List<Member> = listOf()) {
     init {
         require(name.isNotBlank()) { throw RoomException("방 이름이 없습니다.") }
 
-        // TODO :: Room, RoomEntity 문제
-//        require(members.size >= MINIMUM_MEMBER_SIZE) { throw RoomException("방은 최소 2명 이상이어야 합니다.") }
+        require(members.size >= MINIMUM_MEMBER_SIZE) { throw RoomException("방은 최소 2명 이상이어야 합니다.") }
         require(members.size == members.distinct().size) { throw RoomException("중복된 사용자가 있어선 안됩니다.") }
     }
 

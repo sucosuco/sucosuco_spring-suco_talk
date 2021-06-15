@@ -4,7 +4,7 @@ import com.suco.sucotalk.auth.service.AuthService
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
 import com.suco.sucotalk.room.dto.RoomDetail
-import com.suco.sucotalk.room.dto.RoomInformation
+import com.suco.sucotalk.room.dto.RoomApproximate
 import com.suco.sucotalk.room.service.RoomService
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
@@ -18,7 +18,7 @@ import javax.validation.Valid
 class RoomController(private val roomService: RoomService, private val authService: AuthService) {
 
     @GetMapping
-    fun getAllRoom(): ResponseEntity<List<RoomInformation>> {
+    fun getAllRoom(): ResponseEntity<List<RoomApproximate>> {
         return ResponseEntity.ok(roomService.rooms())
     }
 
@@ -51,13 +51,13 @@ class RoomController(private val roomService: RoomService, private val authServi
     }
 
     @GetMapping("/my")
-    fun getMyRooms(request: HttpServletRequest): ResponseEntity<List<RoomInformation>> {
+    fun getMyRooms(request: HttpServletRequest): ResponseEntity<List<RoomApproximate>> {
         val userName = authService.getPayload(request)
         return ResponseEntity.ok(roomService.myRooms(userName))
     }
 
     @GetMapping("/accessible")
-    fun getAccessibleRooms(request: HttpServletRequest): ResponseEntity<List<RoomInformation>> {
+    fun getAccessibleRooms(request: HttpServletRequest): ResponseEntity<List<RoomApproximate>> {
         val userName = authService.getPayload(request)
         return ResponseEntity.ok(roomService.accessibleRooms(userName))
     }

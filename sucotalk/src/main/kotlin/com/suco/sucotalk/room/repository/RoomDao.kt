@@ -2,10 +2,12 @@ package com.suco.sucotalk.room.repository
 
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.domain.RoomInfo
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
+import java.sql.SQLException
 
 @Repository
 class RoomDao(private val jdbcTemplate: JdbcTemplate) {
@@ -40,14 +42,16 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
         }
     }
 
-    fun findById(id: Long): Room {
+    fun findById(id: Long): RoomInfo {
         val sql = "SELECT * FROM ROOM WHERE id = ?"
 
         try {
             return jdbcTemplate.queryForObject(sql, { rs, rn ->
-                Room(rs.getLong("id"), rs.getString("name")) }, id)!!
+                RoomInfo(rs.getLong("id"), rs.getString("name"))}, id)!!
         } catch (e: EmptyResultDataAccessException) {
-            throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
+            throw IllegalArgumentException("등록되지 않은 방입니다.")
+        } catch (e : Exception){
+            throw SQLException("error with jdbcTemplate")
         }
     }
 

@@ -3,6 +3,7 @@ package com.suco.sucotalk.room.repository
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.domain.RoomInfo
 import org.springframework.stereotype.Repository
 import java.util.stream.Collectors
 
@@ -15,7 +16,7 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     }
 
     fun findById(id: Long): Room {
-        val room: Room = roomDao.findById(id)
+        val room: RoomInfo = roomDao.findById(id)
         val participants: List<Long> = roomDao.findParticipantsById(id)
         val members: List<Member> = memberDao.findByIds(participants)
         return Room(room.id, room.name, members)

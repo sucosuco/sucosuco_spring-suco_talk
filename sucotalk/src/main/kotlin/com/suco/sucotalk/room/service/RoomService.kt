@@ -8,7 +8,7 @@ import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.dto.RoomCreateRequest
 import com.suco.sucotalk.room.dto.RoomCreateResponse
 import com.suco.sucotalk.room.dto.RoomDetail
-import com.suco.sucotalk.room.dto.RoomInformation
+import com.suco.sucotalk.room.dto.RoomApproximate
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
@@ -19,21 +19,21 @@ class RoomService(
     private val memberDao: MemberDao
 ) {
 
-    fun rooms(): List<RoomInformation> {
+    fun rooms(): List<RoomApproximate> {
         val rooms = roomRepositoryImpl.findAll()
-        return RoomInformation.listOf(rooms)
+        return RoomApproximate.listOf(rooms)
     }
 
-    fun myRooms(userName: String): List<RoomInformation> {
+    fun myRooms(userName: String): List<RoomApproximate> {
         val user = memberDao.findByName(userName);
         val rooms = roomRepositoryImpl.findEnteredRooms(user)
-        return RoomInformation.listOf(rooms)
+        return RoomApproximate.listOf(rooms)
     }
 
-    fun accessibleRooms(userName: String): List<RoomInformation> {
+    fun accessibleRooms(userName: String): List<RoomApproximate> {
         val user = memberDao.findByName(userName);
         val rooms = roomRepositoryImpl.findAccessibleRooms(user)
-        return RoomInformation.listOf(rooms)
+        return RoomApproximate.listOf(rooms)
     }
 
     fun exit(memberName: String, roomId: Long) {

@@ -4,7 +4,9 @@ import com.suco.sucotalk.chat.dto.SendMessageDto
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.domain.RoomInfo
 import com.suco.sucotalk.room.repository.RoomDao
+import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -26,6 +28,9 @@ class MessageServiceTest {
     @Autowired
     lateinit var roomDao: RoomDao
 
+    @Autowired
+    lateinit var roomRepositoryImpl: RoomRepositoryImpl
+
     private lateinit var testMember1: Member
     private lateinit var testMember2: Member
     private lateinit var testRoom: Room
@@ -39,7 +44,7 @@ class MessageServiceTest {
         testMember2 = memberDao.findById(memberId2)
 
         val roomId = roomDao.create(Room("testRoom", listOf(testMember1, testMember2)))
-        testRoom = roomDao.findById(roomId)
+        testRoom = roomRepositoryImpl.findById(roomId)
 
         roomDao.saveParticipants(testRoom)
     }

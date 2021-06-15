@@ -6,6 +6,7 @@ import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomDao
+import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 @Profile("!test")
 class DataLoader(
     private val roomDao: RoomDao,
+    private val roomRepositoryImpl: RoomRepositoryImpl,
     private val memberDao: MemberDao,
     private val messageDao: MessageDao
 ) : CommandLineRunner {
@@ -34,9 +36,9 @@ class DataLoader(
         val room2Id: Long = roomDao.create(Room(name = "room2", members = listOf(corgi, suri, jinhwan)))
         val room3Id: Long = roomDao.create(Room(name = "room3", members = listOf(suri, dawon)))
 
-        val room1: Room = roomDao.findById(room1Id)
-        val room2: Room = roomDao.findById(room2Id)
-        val room3: Room = roomDao.findById(room3Id)
+        val room1: Room = roomRepositoryImpl.findById(roomDao.findById(room1Id).id!!)
+        val room2: Room = roomRepositoryImpl.findById(roomDao.findById(room2Id).id!!)
+        val room3: Room = roomRepositoryImpl.findById(roomDao.findById(room3Id).id!!)
 
         val message1 = Message(sender = corgi, room = room1, content = "hi")
         val message2 = Message(sender = suri, room = room1, content = "hey")
