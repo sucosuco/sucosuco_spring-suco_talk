@@ -32,13 +32,11 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         return ids.map { findById(it) }
     }
 
-    fun findAccessibleRooms(member: Member): List<Room> {
-        val rooms = roomDao.getAllRoom()
+    fun findAccessibleRooms(member: Member): List<RoomInfo> {
+        val rooms :List<RoomInfo> = roomDao.getAllRoom()
         val ids = roomDao.findRoomByMember(member)
 
-        return rooms.stream()
-            .filter { room -> !ids.contains(room.id) }
-            .collect(Collectors.toList())
+        return rooms.filter { room -> !ids.contains(room.id) }
     }
 
     fun deleteMemberInRoom(room: Room, member: Member) {

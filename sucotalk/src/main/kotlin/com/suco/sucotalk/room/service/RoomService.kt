@@ -5,10 +5,10 @@ import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
-import com.suco.sucotalk.room.dto.RoomCreateRequest
-import com.suco.sucotalk.room.dto.RoomCreateResponse
-import com.suco.sucotalk.room.dto.RoomDetail
+import com.suco.sucotalk.room.domain.RoomInfo
 import com.suco.sucotalk.room.dto.RoomApproximate
+import com.suco.sucotalk.room.dto.RoomDetail
+import com.suco.sucotalk.room.dto.RoomRequest
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
@@ -20,19 +20,19 @@ class RoomService(
 ) {
 
     fun rooms(): List<RoomApproximate> {
-        val rooms = roomRepositoryImpl.findAll()
-        return RoomApproximate.listOf(rooms)
+        val rooms: List<Room> = roomRepositoryImpl.findAll()
+        return RoomApproximate.listOf(rooms.map { RoomInfo(it) })
     }
 
     fun myRooms(userName: String): List<RoomApproximate> {
         val user = memberDao.findByName(userName);
-        val rooms = roomRepositoryImpl.findEnteredRooms(user)
-        return RoomApproximate.listOf(rooms)
+        val rooms: List<Room> = roomRepositoryImpl.findEnteredRooms(user)
+        return RoomApproximate.listOf(rooms.map { RoomInfo(it) })
     }
 
     fun accessibleRooms(userName: String): List<RoomApproximate> {
         val user = memberDao.findByName(userName);
-        val rooms = roomRepositoryImpl.findAccessibleRooms(user)
+        val rooms: List<RoomInfo> = roomRepositoryImpl.findAccessibleRooms(user)
         return RoomApproximate.listOf(rooms)
     }
 
@@ -64,7 +64,33 @@ class RoomService(
         return messageService.findAllInRoom(newRoom)
     }
 
-//    fun sendMessage(sender: Member, roomId: Long, message: String) {
+    fun createRoom(masterName: String, roomInfo: RoomRequest): RoomApproximate {
+        val master = memberDao.findByName(masterName);
+        val members = memberDao.findByIds(roomInfo.members).plus(master)
+
+        val savedRoom = roomRepositoryImpl.save(Room(roomInfo.name, members))
+        return RoomApproximate.of(savedRoom)
+    }
+
+    private fun createNewRoom(members: List<Member>): Room {
+        val roomName = members.map { it.name }.joinToString { "," }
+        return roomRepositoryImpl.save(Room(roomName, members))
+    }
+
+    private fun findDirectRoom(sender: Member, receiver: Member): Room? {
+        val dmRooms1 = roomRepositoryImpl.findEnteredRooms(sender).filter { it.isDm() }
+        val dmRooms2 = roomRepositoryImpl.findEnteredRooms(receiver).filter { it.isDm() }
+
+        return dmRooms1.find { dmRooms2.contains(it) }
+    }
+
+    fun roomDetail(id: Long): RoomDetail {
+        val room: Room = roomRepositoryImpl.findById(id)
+        val messages: List<MessageDto> = messageService.findAllInRoom(room)
+        return RoomDetail.of(room, messages)
+    }
+
+    //    fun sendMessage(sender: Member, roomId: Long, message: String) {
 //        sendMessage(sender, roomRepositoryImpl.findById(roomId), message)
 //    }
 //
@@ -80,30 +106,4 @@ class RoomService(
 //
 //        sendMessage(sender, dmRoom, message)
 //    }
-
-    fun createRoom(masterName: String, roomInfo: RoomCreateRequest): RoomCreateResponse {
-        val master = memberDao.findByName(masterName);
-        val members = memberDao.findByIds(roomInfo.members).plus(master)
-
-        val savedRoom = roomRepositoryImpl.save(Room(roomInfo.name, members))
-        return RoomCreateResponse.of(savedRoom)
-    }
-
-    private fun createNewRoom(members: List<Member>): Room {
-        val roomName = members.map{it.name}.joinToString { "," }
-        return roomRepositoryImpl.save(Room(roomName,members))
-    }
-
-    private fun findDirectRoom(sender: Member, receiver: Member): Room? {
-        val dmRooms1 = roomRepositoryImpl.findEnteredRooms(sender).filter { it.isDm() }
-        val dmRooms2 = roomRepositoryImpl.findEnteredRooms(receiver).filter { it.isDm() }
-
-        return dmRooms1.find { dmRooms2.contains(it) }
-    }
-
-    fun roomDetail(id: Long): RoomDetail {
-        val room: Room = roomRepositoryImpl.findById(id)
-        val messages: List<MessageDto> = messageService.findAllInRoom(room)
-        return RoomDetail.of(room, messages)
-    }
 }

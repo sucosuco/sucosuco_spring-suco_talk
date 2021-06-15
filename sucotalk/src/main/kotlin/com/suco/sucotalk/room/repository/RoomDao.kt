@@ -14,11 +14,11 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
 
-    fun getAllRoom(): List<Room> {
+    fun getAllRoom(): List<RoomInfo> {
         val sql = "SELECT * FROM ROOM"
 
         return jdbcTemplate.query(sql) { rs, rn ->
-            Room(rs.getLong("id"), rs.getString("name"))
+            RoomInfo(rs.getLong("id"), rs.getString("name"))
         }
     }
 

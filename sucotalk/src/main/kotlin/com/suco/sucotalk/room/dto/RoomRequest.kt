@@ -2,7 +2,7 @@ package com.suco.sucotalk.room.dto
 
 import javax.validation.constraints.NotBlank
 
-data class RoomCreateRequest(
+data class RoomRequest(
     @field:NotBlank(message = "방 이름은 빈칸일 수 없습니다.")
     val name: String,
     val members: List<Long>
