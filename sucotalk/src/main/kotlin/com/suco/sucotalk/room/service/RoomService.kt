@@ -1,6 +1,6 @@
 package com.suco.sucotalk.room.service
 
-import com.suco.sucotalk.chat.dto.MessageDto
+import com.suco.sucotalk.chat.dto.MessageResponse
 import com.suco.sucotalk.chat.service.MessageService
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
@@ -32,8 +32,7 @@ class RoomService(
 
     fun accessibleRooms(userName: String): List<RoomApproximate> {
         val user = memberDao.findByName(userName);
-        val rooms: List<RoomInfo> = roomRepositoryImpl.findAccessibleRooms(user)
-        return RoomApproximate.listOf(rooms)
+        return RoomApproximate.listOf(roomRepositoryImpl.findAccessibleRooms(user))
     }
 
     fun exit(memberName: String, roomId: Long) {
@@ -43,7 +42,7 @@ class RoomService(
         roomRepositoryImpl.deleteMemberInRoom(room, member)
     }
 
-    fun enter(memberName: String, roomId: Long): List<MessageDto> {
+    fun enter(memberName: String, roomId: Long): List<MessageResponse> {
         val member = memberDao.findByName(memberName)
         val room = roomRepositoryImpl.findById(roomId)
         room.enter(member)
@@ -52,7 +51,7 @@ class RoomService(
     }
 
     // TODO :: 네이밍 확인하기
-    fun enterNewRoom(memberIds: List<Long>): List<MessageDto> {
+    fun enterNewRoom(memberIds: List<Long>): List<MessageResponse> {
         val members = memberIds.map { memberDao.findById(it) }
 
         if (members.size == 2) {
@@ -86,7 +85,7 @@ class RoomService(
 
     fun roomDetail(id: Long): RoomDetail {
         val room: Room = roomRepositoryImpl.findById(id)
-        val messages: List<MessageDto> = messageService.findAllInRoom(room)
+        val messages = messageService.findAllInRoom(room)
         return RoomDetail.of(room, messages)
     }
 

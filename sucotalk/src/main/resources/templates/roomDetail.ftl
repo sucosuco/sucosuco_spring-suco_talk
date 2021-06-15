@@ -30,9 +30,9 @@
         <div class="input-group-prepend">
             <label class="input-group-text">내용</label>
         </div>
-        <input type="text" class="form-control" v-model="message" v-on:keypress.enter="sendMessage">
+        <input type="text" class="form-control" v-model="message" v-on:keypress.enter="message">
         <div class="input-group-append">
-            <button class="btn btn-primary" type="button" @click="sendMessage">보내기</button>
+            <button class="btn btn-primary" type="button" @click="message">보내기</button>
         </div>
     </div>
     <ul class="list-group">
@@ -71,7 +71,7 @@
                     this.messages = response.data.messages;
                 });
             },
-            sendMessage: function () {
+            message: function () {
                 ws.send("/pub/chat/message", {}, JSON.stringify({
                     type: 'TALK',
                     roomId: this.roomId,

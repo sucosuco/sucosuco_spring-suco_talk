@@ -28,7 +28,7 @@ class RoomController(private val roomService: RoomService, private val authServi
     @PostMapping
     fun createNewRoom(@Valid @RequestBody roomInfo: RoomRequest, request: HttpServletRequest): ResponseEntity<RoomApproximate>? {
         val userName = authService.getPayload(request)
-        val room: RoomApproximate = roomService.createRoom(userName, roomInfo)
+        val room = roomService.createRoom(userName, roomInfo)
         return ResponseEntity.created(URI.create("/rooms/" + room.id)).body(room);
     }
 

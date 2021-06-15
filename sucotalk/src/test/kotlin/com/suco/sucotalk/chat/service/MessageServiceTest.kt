@@ -1,10 +1,9 @@
 package com.suco.sucotalk.chat.service
 
-import com.suco.sucotalk.chat.dto.SendMessageDto
+import com.suco.sucotalk.chat.dto.MessageRequest
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
-import com.suco.sucotalk.room.domain.RoomInfo
 import com.suco.sucotalk.room.repository.RoomDao
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.assertj.core.api.Assertions.assertThat
@@ -55,7 +54,7 @@ class MessageServiceTest {
     fun saveMessage() {
 
         //given
-        val testMessage = SendMessageDto(testRoom.id!!, testMember1.name, "테스트")
+        val testMessage = MessageRequest(testRoom.id!!, testMember1.name, "테스트")
 
         //when
         val message = messageService.save(testMessage)
@@ -69,9 +68,9 @@ class MessageServiceTest {
     fun findAllMessageInRoom() {
 
         //given
-        val testMessage1 = messageService.save(SendMessageDto(testRoom.id!!, testMember1.name, "테스트"))
-        val testMessage2 = messageService.save(SendMessageDto(testRoom.id!!, testMember2.name, "테스트"))
-        val testMessage3 = messageService.save(SendMessageDto(testRoom.id!!, testMember2.name, "테스트"))
+        val testMessage1 = messageService.save(MessageRequest(testRoom.id!!, testMember1.name, "테스트"))
+        val testMessage2 = messageService.save(MessageRequest(testRoom.id!!, testMember2.name, "테스트"))
+        val testMessage3 = messageService.save(MessageRequest(testRoom.id!!, testMember2.name, "테스트"))
 
         //when
         val messages = messageService.findAllInRoom(testRoom)
