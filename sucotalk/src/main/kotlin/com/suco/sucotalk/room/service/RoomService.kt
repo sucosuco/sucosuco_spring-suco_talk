@@ -65,22 +65,22 @@ class RoomService(
         return messageService.findAllInRoom(newRoom)
     }
 
-    fun sendMessage(sender: Member, roomId: Long, message: String) {
-        sendMessage(sender, roomRepositoryImpl.findById(roomId), message)
-    }
-
-    fun sendMessage(sender: Member, room: Room, message: String) {
-        val message = Message(sender = sender, room = room, content = message)
-        messageService.save(message)
-//        socketService.send(message)
-    }
-
-    fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
-        val dmRoom = findDirectRoom(sender, receiver)
-            ?: createNewRoom(mutableListOf(sender, receiver))
-
-        sendMessage(sender, dmRoom, message)
-    }
+//    fun sendMessage(sender: Member, roomId: Long, message: String) {
+//        sendMessage(sender, roomRepositoryImpl.findById(roomId), message)
+//    }
+//
+//    fun sendMessage(sender: Member, room: Room, message: String) {
+//        val message = Message(sender = sender, room = room, content = message)
+//        messageService.save(message)
+////        socketService.send(message)
+//    }
+//
+//    fun sendDirectMessage(sender: Member, receiver: Member, message: String) {
+//        val dmRoom = findDirectRoom(sender, receiver)
+//            ?: createNewRoom(mutableListOf(sender, receiver))
+//
+//        sendMessage(sender, dmRoom, message)
+//    }
 
     fun createRoom(masterName: String, roomInfo: RoomCreateRequest): RoomCreateResponse {
         val master = memberDao.findByName(masterName);

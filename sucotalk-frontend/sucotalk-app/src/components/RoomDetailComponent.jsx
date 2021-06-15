@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import SucoTalkService from '../service/SucoTalkService';
+import SockJS from 'sockjs-client';
+import StompJs from 'stompjs';
 
 class RoomDetailComponent extends Component {
 
@@ -9,7 +11,10 @@ class RoomDetailComponent extends Component {
         this.state = {
             room: {},
             members: [],
-            messages:[]
+            message: '',
+            messages:[],
+            sockJs: {},
+            stompClient: {},
         }
     }
 
@@ -20,7 +25,12 @@ class RoomDetailComponent extends Component {
                 members: res.data.room.members,
                 messages: res.data.messages
             });
+            this.connect();
         }); 
+    }
+
+    changeMessageHandler = (event) => {
+        this.setState({message: event.target.value})
     }
 
     enter() {
@@ -43,6 +53,39 @@ class RoomDetailComponent extends Component {
             alert(error.response.data.message)
             this.componentDidMount();
         })
+    }
+
+    connect() {
+        const sockJs = new SockJS('http://localhost:8080/ws-stomp');
+        const stompClient = StompJs.over(sockJs)
+        const roomId = this.state.room.id;
+        const messages = this.state.messages;
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/sub/chat/room/' + roomId, function(message) {
+                const receive = JSON.parse(message.body);
+                messages.push(receive);
+                refresh(messages)
+            })
+        });
+
+        const refresh = (messages) => {
+            this.setState({
+                messages : messages
+            })
+        }
+
+        this.setState({
+            sockJs: sockJs,
+            stompClient: stompClient
+        })
+    }
+
+    sendMessage() {
+        const auth_token = "Bearer "+ localStorage.getItem("authorization")
+        this.state.stompClient.send("/pub/chat/message", {'Authorization': auth_token}, JSON.stringify({
+            roomId: this.state.room.id,
+            contents: this.state.message
+        }))
     }
 
     render() {
@@ -73,9 +116,9 @@ class RoomDetailComponent extends Component {
                     <div class="input-group-prepend">
                         <label class="input-group-text">내용</label>
                     </div>
-                    <input type="text" class="form-control"/>
+                    <input type="text" class="form-control" value = {this.state.message} onChange={this.changeMessageHandler}/>
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="button" onClick="sendMessage">보내기</button>
+                        <button class="btn btn-primary" type="button" onClick={() => this.sendMessage()}>보내기</button>
                     </div>
                 </div>
                 <ul class="list-group">
@@ -83,7 +126,7 @@ class RoomDetailComponent extends Component {
                         this.state.messages.map (
                             message => 
                             <li class = "list-group-item">
-                                {message.sender.name} : {message.contents}
+                                {message.sender.name} : {message.contents}     - {message.sendTime}
                             </li>
                         )
                     }

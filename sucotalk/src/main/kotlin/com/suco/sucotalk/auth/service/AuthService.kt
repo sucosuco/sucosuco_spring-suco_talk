@@ -18,6 +18,15 @@ class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val me
         return jwtTokenProvider.createToken(payload)
     }
 
+    fun getPayloadFromBearer(bearerToken: String): String {
+        val token = bearerToken.split(" ")[1]
+        try {
+            return jwtTokenProvider.getPayload(token)
+        } catch (e: Exception) {
+            throw AuthException("로그인된 사용자가 아닙니다.")
+        }
+    }
+
     fun getPayload(httpServletRequest: HttpServletRequest): String {
         try {
             val token = AuthorizationExtractor.extract(httpServletRequest)

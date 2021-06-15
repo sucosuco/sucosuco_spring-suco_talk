@@ -22,7 +22,7 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
             ps
         }, keyHolder)
         val id = keyHolder.key!!.toLong()
-        return Message(id, message.sender, message.room, message.content)
+        return Message(id, message.sender, message.room, message.content, message.time)
     }
 
     fun findByRoom(room: Room): List<Message> {
