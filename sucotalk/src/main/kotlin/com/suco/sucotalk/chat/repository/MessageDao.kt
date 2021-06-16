@@ -14,6 +14,10 @@ import java.time.format.DateTimeFormatter
 class MessageDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
+//1. ms request 예전에 ㅐ생성
+    // 2. loading90
+    // 3. dao
+
 
     fun save(message: Message): Message {
         val sql = "INSERT INTO MESSAGE (sender_id, room_id, contents) VALUES (?, ?, ?)"

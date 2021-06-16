@@ -51,7 +51,7 @@ class RoomService(
         return messageService.findAllInRoom(room)
     }
 
-    // TODO :: 네이밍 확인하기
+    // TODO :: 네이밍 확인하기 -> dm 죽이기
     fun enterNewRoom(memberIds: List<Long>): List<MessageResponse> {
         val members = memberIds.map { memberDao.findById(it) }
 
