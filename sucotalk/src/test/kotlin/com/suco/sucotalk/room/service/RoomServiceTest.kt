@@ -1,8 +1,11 @@
 package com.suco.sucotalk.room.service
 
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.member.dto.MemberResponse
+import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.member.service.MemberService
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.repository.RoomDao
 import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -23,7 +26,7 @@ class RoomServiceTest {
     lateinit var roomService: RoomService
 
     @Autowired
-    lateinit var memberService: MemberService
+    lateinit var memberDao: MemberDao
 
     lateinit var savedMember1: Member
     lateinit var savedMember2: Member
@@ -31,13 +34,13 @@ class RoomServiceTest {
 
     @BeforeEach
     fun initMemberAndRoom() {
-        val savedMemberId1 = memberService.createMember("test1", "test")
-        val savedMemberId2 = memberService.createMember("test2", "test")
-        val savedMemberId3 = memberService.createMember("test3", "test")
+        val savedMemberId1 = memberDao.insert("test1", "test")
+        val savedMemberId2 = memberDao.insert("test2", "test")
+        val savedMemberId3 = memberDao.insert("test3", "test")
 
-        savedMember1 = memberService.findById(savedMemberId1)
-        savedMember2 = memberService.findById(savedMemberId2)
-        savedMember3 = memberService.findById(savedMemberId3)
+        savedMember1 = memberDao.findById(savedMemberId1)
+        savedMember2 = memberDao.findById(savedMemberId2)
+        savedMember3 = memberDao.findById(savedMemberId3)
     }
 
     @DisplayName("enterNewRoom :: 두 명 이상의 유저가 방을 정상 생성한다.")

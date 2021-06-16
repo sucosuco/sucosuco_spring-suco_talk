@@ -26,15 +26,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 
-	implementation ("org.springframework.boot:spring-boot-starter-freemarker")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	implementation ("net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation ("io.jsonwebtoken:jjwt:0.9.1")
+	implementation ("javax.xml.bind:jaxb-api:2.3.0")
 
 	implementation ("com.h2database:h2")
 
@@ -44,9 +43,6 @@ dependencies {
 	implementation ("org.webjars:sockjs-client:1.1.2")
 	implementation ("org.webjars:stomp-websocket:2.3.3-1")
 	implementation ("com.google.code.gson:gson:2.8.0")
-
-	implementation ("io.jsonwebtoken:jjwt:0.9.1")
-	implementation ("javax.xml.bind:jaxb-api:2.3.0")
 }
 
 tasks.withType<KotlinCompile> {

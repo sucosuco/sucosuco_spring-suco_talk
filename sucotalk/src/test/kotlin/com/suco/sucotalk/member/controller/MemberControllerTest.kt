@@ -3,6 +3,8 @@ package com.suco.sucotalk.member.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.suco.sucotalk.DataLoader
 import com.suco.sucotalk.member.domain.Member
+import com.suco.sucotalk.member.dto.MemberRequest
+import com.suco.sucotalk.member.dto.MemberResponse
 import com.suco.sucotalk.member.service.MemberService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -37,12 +39,12 @@ class MemberControllerTest {
     @Autowired
     lateinit var memberService: MemberService
 
-    val requestMember = Member(name = "test", password = "test")
-    lateinit var savedMember: Member
+    val requestMember = MemberRequest( "test", "test")
+    lateinit var savedMember: MemberResponse
 
     @BeforeEach
     fun initTestMember() {
-        val createdId = memberService.createMember(requestMember.name, requestMember.password)
+        val createdId = memberService.createMember(requestMember)
         savedMember = memberService.findById(createdId)
     }
 
@@ -61,7 +63,7 @@ class MemberControllerTest {
         mockMvc.perform(
             post("/member")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(Member(name = "test2", password = "test2")))
+                .content(objectMapper.writeValueAsString(MemberRequest( "test2",  "test2")))
         ).andExpect(status().isCreated)
     }
 
@@ -75,7 +77,7 @@ class MemberControllerTest {
     @DisplayName("로그인 요청을 수행한다. :: 올바르지 않는 유저일 경우 BadRequest 반환")
     @Test
     fun loginMemberWithInvalidUser() {
-        val nonExistMember = Member(name = "nonExist", password = "invalid")
+        val nonExistMember = MemberRequest( "nonExist",  "invalid")
         requestLogin(nonExistMember).andExpect(status().isBadRequest)
     }
 
@@ -93,7 +95,7 @@ class MemberControllerTest {
             .andExpect(status().isOk)
     }
 
-    private fun requestLogin(requestMember: Member) = mockMvc.perform(
+    private fun requestLogin(requestMember: MemberRequest) = mockMvc.perform(
         post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(requestMember))

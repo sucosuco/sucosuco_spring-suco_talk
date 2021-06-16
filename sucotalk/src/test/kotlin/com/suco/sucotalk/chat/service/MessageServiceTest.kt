@@ -1,10 +1,11 @@
 package com.suco.sucotalk.chat.service
 
-import com.suco.sucotalk.chat.domain.Message
+import com.suco.sucotalk.chat.dto.MessageRequest
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.repository.RoomDao
+import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -26,6 +27,9 @@ class MessageServiceTest {
     @Autowired
     lateinit var roomDao: RoomDao
 
+    @Autowired
+    lateinit var roomRepositoryImpl: RoomRepositoryImpl
+
     private lateinit var testMember1: Member
     private lateinit var testMember2: Member
     private lateinit var testRoom: Room
@@ -38,8 +42,8 @@ class MessageServiceTest {
         val memberId2 = memberDao.insert(Member("test2", "password"))
         testMember2 = memberDao.findById(memberId2)
 
-        val roomId = roomDao.create(Room("testRoom",listOf(testMember1, testMember2)))
-        testRoom = roomDao.findById(roomId)
+        val roomId = roomDao.create(Room("testRoom", listOf(testMember1, testMember2)))
+        testRoom = roomRepositoryImpl.findById(roomId)
 
         roomDao.saveParticipants(testRoom)
     }
@@ -50,7 +54,7 @@ class MessageServiceTest {
     fun saveMessage() {
 
         //given
-        val testMessage = Message(sender = testMember1, room = testRoom, content = "테스트")
+        val testMessage = MessageRequest(testRoom.id!!, testMember1.name, "테스트")
 
         //when
         val message = messageService.save(testMessage)
@@ -64,9 +68,9 @@ class MessageServiceTest {
     fun findAllMessageInRoom() {
 
         //given
-        val testMessage1 = messageService.save(Message(sender = testMember1, room = testRoom, content = "테스트1"))
-        val testMessage2 = messageService.save(Message(sender = testMember2, room = testRoom, content = "테스트2"))
-        val testMessage3 = messageService.save(Message(sender = testMember2, room = testRoom, content = "테스트3"))
+        val testMessage1 = messageService.save(MessageRequest(testRoom.id!!, testMember1.name, "테스트"))
+        val testMessage2 = messageService.save(MessageRequest(testRoom.id!!, testMember2.name, "테스트"))
+        val testMessage3 = messageService.save(MessageRequest(testRoom.id!!, testMember2.name, "테스트"))
 
         //when
         val messages = messageService.findAllInRoom(testRoom)

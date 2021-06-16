@@ -29,6 +29,7 @@ class LoginComponent extends Component {
         }
         this.props.login(user)
     }
+
     render() {
         if (JSON.stringify({}) === JSON.stringify(this.props.user)) {
             return (

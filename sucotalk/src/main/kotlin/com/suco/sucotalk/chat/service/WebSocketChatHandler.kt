@@ -9,7 +9,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 class WebSocketChatHandler() : TextWebSocketHandler() {
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        val payload = message.payload
         val textMessage = TextMessage("Welcome suco talk")
         session.sendMessage(textMessage)
     }

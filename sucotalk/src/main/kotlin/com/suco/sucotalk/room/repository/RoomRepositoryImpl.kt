@@ -3,6 +3,7 @@ package com.suco.sucotalk.room.repository
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.domain.RoomInfo
 import org.springframework.stereotype.Repository
 import java.util.stream.Collectors
 
@@ -15,10 +16,14 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     }
 
     fun findById(id: Long): Room {
-        val room: Room = roomDao.findById(id)
+        val room: RoomInfo = roomDao.findById(id)
         val participants: List<Long> = roomDao.findParticipantsById(id)
         val members: List<Member> = memberDao.findByIds(participants)
         return Room(room.id, room.name, members)
+    }
+
+    fun isExisting(room: Room) : Boolean{
+        return roomDao.isExistingName(room.name)
     }
 
     fun findAll(): List<Room> {
@@ -31,13 +36,11 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         return ids.map { findById(it) }
     }
 
-    fun findAccessibleRooms(member: Member): List<Room> {
-        val rooms = roomDao.getAllRoom()
+    fun findAccessibleRooms(member: Member): List<RoomInfo> {
+        val rooms :List<RoomInfo> = roomDao.getAllRoom()
         val ids = roomDao.findRoomByMember(member)
 
-        return rooms.stream()
-            .filter { room -> !ids.contains(room.id) }
-            .collect(Collectors.toList())
+        return rooms.filter { room -> !ids.contains(room.id) }
     }
 
     fun deleteMemberInRoom(room: Room, member: Member) {

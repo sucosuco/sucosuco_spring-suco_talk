@@ -2,21 +2,23 @@ package com.suco.sucotalk.room.repository
 
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
+import com.suco.sucotalk.room.domain.RoomInfo
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
+import java.sql.SQLException
 
 @Repository
 class RoomDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
 
-    fun getAllRoom(): List<Room> {
+    fun getAllRoom(): List<RoomInfo> {
         val sql = "SELECT * FROM ROOM"
 
         return jdbcTemplate.query(sql) { rs, rn ->
-            Room(rs.getLong("id"), rs.getString("name"))
+            RoomInfo(rs.getLong("id"), rs.getString("name"))
         }
     }
 
@@ -40,15 +42,17 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
         }
     }
 
-    fun findById(id: Long): Room {
+    fun findById(id: Long): RoomInfo {
         val sql = "SELECT * FROM ROOM WHERE id = ?"
 
         try {
             return jdbcTemplate.queryForObject(sql, { rs, rn ->
-                Room(rs.getLong("id"), rs.getString("name"))
+                RoomInfo(rs.getLong("id"), rs.getString("name"))
             }, id)!!
         } catch (e: EmptyResultDataAccessException) {
-            throw IllegalArgumentException("등록되지 않은 아이디 입니다.")
+            throw IllegalArgumentException("등록되지 않은 방입니다.")
+        } catch (e: Exception) {
+            throw SQLException("error with jdbcTemplate")
         }
     }
 
@@ -74,5 +78,10 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
     fun insertMemberInRoom(room: Room, member: Member) {
         val sql = "INSERT INTO PARTICIPANTS (member_id, room_id) VALUES (?, ?)"
         jdbcTemplate.update(sql, member.id, room.id)
+    }
+
+    fun isExistingName(name: String): Boolean {
+        val sql = "SELECT EXISTS (SELECT id from ROOM WHERE name = ?)"
+        return jdbcTemplate.queryForObject(sql, Boolean::class.java, name)
     }
 }

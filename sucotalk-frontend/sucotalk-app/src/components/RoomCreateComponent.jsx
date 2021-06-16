@@ -33,12 +33,21 @@ class CreateRoomList extends Component {
             members: ids
         }
 
+        if(roomInfo.name == null || roomInfo.name.trim() == ""){
+            alert("방 이름은 빈칸일 수 없습니다.")
+            return;
+        }
+
         SucoTalkService.createRoom(roomInfo)
             .then(res => {
                 this.props.history.push("/room/" + res.data.id);
             })
             .catch(error => {
-                alert(error)
+                if(error.response.data.message != null){
+                    alert(error.response.data.message)
+                } else{
+                    alert(error)
+                }
             })
     }
 
