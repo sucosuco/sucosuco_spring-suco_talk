@@ -58,12 +58,13 @@ class App extends Component {
     }
 
     logout = () => {
-        SucoTalkService.logout()
-
+        SucoTalkService.logout();
+        
         alert("정상적으로 로그아웃 되었습니다.")
         this.setState({
             user: {}
         })
+        this.render();
     }
 }
 
