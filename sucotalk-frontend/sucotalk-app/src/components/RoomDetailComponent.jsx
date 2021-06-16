@@ -33,17 +33,6 @@ class RoomDetailComponent extends Component {
         this.setState({message: event.target.value})
     }
 
-    enter() {
-        SucoTalkService.enterRoom(this.props.match.params.id).then(() => {
-            alert('들어가기 성공');
-            this.componentDidMount();
-        })
-        .catch(error => {
-            alert(error.response.data.message)
-            this.componentDidMount();
-        })
-    }
-
     exit() {
         SucoTalkService.exitRoom(this.props.match.params.id).then(() => {
             alert('나가기 성공');
@@ -100,11 +89,6 @@ class RoomDetailComponent extends Component {
                                     <h5>{member.name}</h5>
                             )
                         }
-                    </div>
-                    <div className="col-md-2">
-                        <button id="logInBtn" className="btn btn-primary btn-block" type="button"
-                                onClick={() => this.enter()}>들가기
-                        </button>
                     </div>
                     <div class="col-md-2">
                         <button id="logInBtn" class="btn btn-primary btn-block" type="button"
