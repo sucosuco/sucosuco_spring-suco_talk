@@ -7,19 +7,18 @@ import com.suco.sucotalk.member.dto.MemberRequest
 import com.suco.sucotalk.member.exception.MemberException
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 import javax.servlet.http.HttpServletRequest
 
 @Service
 class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val memberService: MemberService) {
 
     fun login(loginMember: MemberRequest): String? {
-        try{
+        try {
             memberService.confirm(loginMember)
             return jwtTokenProvider.createToken(loginMember.name)
-        }catch (memberException :MemberException){
+        } catch (memberException: MemberException) {
             throw AuthException("로그인 실패")
-        }catch (e : Exception){
+        } catch (e: Exception) {
             throw IllegalArgumentException(e.message)
         }
     }

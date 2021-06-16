@@ -14,10 +14,6 @@ import java.time.format.DateTimeFormatter
 class MessageDao(private val jdbcTemplate: JdbcTemplate) {
 
     private val keyHolder = GeneratedKeyHolder()
-//1. ms request 예전에 ㅐ생성
-    // 2. loading90
-    // 3. dao
-
 
     fun save(message: Message): Message {
         val sql = "INSERT INTO MESSAGE (sender_id, room_id, contents) VALUES (?, ?, ?)"
@@ -32,21 +28,26 @@ class MessageDao(private val jdbcTemplate: JdbcTemplate) {
         val now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         return Message(id, message.sender, message.room, message.content, now)
     }
-    // TODO :: 시간 처리
 
-    // TODO :: join 문 복습
     fun findByRoom(room: Room): List<Message> {
-        val sql = "SELECT MS.id, MS.contents, MS.send_time, ME.id as member_id, ME.name, ME.password FROM MEMBER as ME JOIN MESSAGE as MS ON ME.id = MS.sender_id WHERE MS.room_id = ?"
+        val sql =
+            "SELECT MS.id, MS.contents, MS.send_time, ME.id as member_id, ME.name, ME.password FROM MEMBER as ME JOIN MESSAGE as MS ON ME.id = MS.sender_id WHERE MS.room_id = ?"
         return jdbcTemplate.query(sql, rowMapper(room), room.id)
     }
 
-    private fun rowMapper(room:Room) = RowMapper<Message> { rs, rn ->
+    private fun rowMapper(room: Room) = RowMapper<Message> { rs, rn ->
         Message(
             id = rs.getLong("id"),
             sender = Member(rs.getLong("member_id"), rs.getString("name"), rs.getString("password")),
             room = room,
             content = rs.getString("contents"),
-            time = rs.getTimestamp("send_time").toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            time = rs.getTimestamp("send_time").toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         )
+    }
+
+    fun deleteAllInRoom(room: Room) {
+        val sql = "DELETE FROM MESSAGE WHERE room_id = ?"
+        jdbcTemplate.update(sql, room.id)
     }
 }

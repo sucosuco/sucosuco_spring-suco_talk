@@ -47,20 +47,6 @@ class MessageServiceTest {
 
         roomDao.saveParticipants(testRoom)
     }
-    
-    /*@DisplayName("메시지를 저장한다.")
-    @Test
-    fun saveMessage() {
-
-        //given
-        val testMessage = MessageRequest(testRoom.id!!, testMember1.name, "테스트")
-
-        //when
-        val message = messageService.save(testMessage)
-
-        //then
-        assertThat(message.id).isNotNull
-    }*/
 
     @DisplayName("채팅방의 모든 메시지를 가져온다.")
     @Test

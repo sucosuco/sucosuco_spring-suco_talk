@@ -37,7 +37,7 @@
     </div>
     <ul class="list-group">
         <li class="list-group-item" v-for="message in messages">
-            {{message.sender.name}} - {{message.contents}}     [{{message.sendTime}}]
+            {{message.sender.name}} - {{message.contents}} [{{message.sendTime}}]
         </li>
     </ul>
     <div></div>
@@ -89,13 +89,13 @@
             },
             exit: function () {
                 axios.post('/rooms/exit/' + this.roomId)
-                .then(response => {
-                    alert('나가기 성공');
-                    location.href = '/roomList';
-                })
-                .catch(error=>{
-                    alert(error.response.data.message);
-                })
+                    .then(response => {
+                        alert('나가기 성공');
+                        location.href = '/roomList';
+                    })
+                    .catch(error => {
+                        alert(error.response.data.message);
+                    })
             }
         }
     });

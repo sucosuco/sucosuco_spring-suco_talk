@@ -30,7 +30,7 @@ class MemberService(private val memberDao: MemberDao) {
     }
 
     fun findFriends(userName: String): List<MemberResponse>? {
-        val friends :List<Member> = memberDao.findAll().filter { it.name != userName }
+        val friends: List<Member> = memberDao.findAll().filter { it.name != userName }
         return MemberResponse.listOf(friends)
     }
 
