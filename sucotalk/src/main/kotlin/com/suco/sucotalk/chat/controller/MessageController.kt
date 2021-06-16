@@ -13,10 +13,9 @@ class MessageController(private val messagingTemplate: SimpMessageSendingOperati
                         private val messageService: MessageService) {
 
     @MessageMapping("/chat/message")
-    fun handleMessage(@Header(value = "Authorization") token:String, message: MessageRequest) {
-        val userName = authService.getPayloadFromBearer(token)
-        val sendMessageDto = MessageRequest(roomId = message.roomId, senderName = userName, contents = message.contents)
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.roomId,  messageService.save(sendMessageDto))
+    fun sendMessage(@Header(value = "Authorization") token:String, message: MessageRequest) {
+        val sender = authService.getPayloadFromBearer(token)
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.roomId,  messageService.send(message, sender))
     }
 
 //     TODO :: messageService에 역할을 넘길 순 없을까

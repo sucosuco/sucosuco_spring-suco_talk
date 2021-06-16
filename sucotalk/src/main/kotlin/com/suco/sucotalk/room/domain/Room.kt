@@ -31,6 +31,10 @@ class Room(val id: Long?, val name: String, members: List<Member> = listOf()) {
         return members.size == 2
     }
 
+    fun isParticipant(member: Member) : Boolean {
+        return members.contains(member)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
