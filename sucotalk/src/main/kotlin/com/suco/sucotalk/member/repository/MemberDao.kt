@@ -19,7 +19,7 @@ class MemberDao(
 
     private val keyHolder = GeneratedKeyHolder()
 
-    fun insert(name:String, password:String): Long {
+    fun insert(name: String, password: String): Long {
         val sql = "INSERT INTO MEMBER (name, password) VALUES (?,?)";
 
         jdbcTemplate.update({
@@ -44,9 +44,9 @@ class MemberDao(
         try {
             val sql = "SELECT * FROM MEMBER WHERE id = ?"
             return jdbcTemplate.queryForObject(sql, rowMapper, id)!!
-        } catch (emptyResultException : EmptyResultDataAccessException) {
+        } catch (emptyResultException: EmptyResultDataAccessException) {
             throw MemberException("존재하지 않는 회원입니다.")
-        } catch (e : Exception){
+        } catch (e: Exception) {
             throw SQLException("error with jdbcTemplate")
         }
     }
@@ -54,9 +54,9 @@ class MemberDao(
     fun findByName(name: String): Member {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM MEMBER WHERE name = ?", rowMapper, name)!!
-        } catch (emptyResultException : EmptyResultDataAccessException) {
+        } catch (emptyResultException: EmptyResultDataAccessException) {
             throw MemberException("존재하지 않는 회원입니다.")
-        } catch (e : Exception){
+        } catch (e: Exception) {
             throw SQLException("error with jdbcTemplate")
         }
     }

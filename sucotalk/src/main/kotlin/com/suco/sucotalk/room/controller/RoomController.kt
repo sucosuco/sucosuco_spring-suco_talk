@@ -1,9 +1,9 @@
 package com.suco.sucotalk.room.controller
 
 import com.suco.sucotalk.auth.service.AuthService
-import com.suco.sucotalk.room.dto.RoomRequest
-import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomApproximate
+import com.suco.sucotalk.room.dto.RoomDetail
+import com.suco.sucotalk.room.dto.RoomRequest
 import com.suco.sucotalk.room.service.RoomService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -26,7 +26,10 @@ class RoomController(private val roomService: RoomService, private val authServi
     }
 
     @PostMapping
-    fun createNewRoom(@Valid @RequestBody roomInfo: RoomRequest, request: HttpServletRequest): ResponseEntity<RoomApproximate>? {
+    fun createNewRoom(
+        @Valid @RequestBody roomInfo: RoomRequest,
+        request: HttpServletRequest
+    ): ResponseEntity<RoomApproximate>? {
         val userName = authService.getPayload(request)
         val room = roomService.createRoom(userName, roomInfo)
         return ResponseEntity.created(URI.create("/rooms/" + room.id)).body(room);

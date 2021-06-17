@@ -12,7 +12,11 @@ import com.suco.sucotalk.room.repository.RoomRepositoryImpl
 import org.springframework.stereotype.Service
 
 @Service
-class MessageService(private val roomRepository: RoomRepositoryImpl, private val memberDao: MemberDao, private val messageDao: MessageDao) {
+class MessageService(
+    private val roomRepository: RoomRepositoryImpl,
+    private val memberDao: MemberDao,
+    private val messageDao: MessageDao
+) {
 
     fun send(messageRequest: MessageRequest, senderName: String): MessageResponse {
         val room = roomRepository.findById(messageRequest.roomId)
@@ -33,5 +37,9 @@ class MessageService(private val roomRepository: RoomRepositoryImpl, private val
 
     private fun save(message: Message): Message {
         return messageDao.save(message);
+    }
+
+    fun deleteAllInRoom(room: Room) {
+        messageDao.deleteAllInRoom(room)
     }
 }

@@ -5,7 +5,6 @@ import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.domain.RoomInfo
 import org.springframework.stereotype.Repository
-import java.util.stream.Collectors
 
 @Repository
 class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: MemberDao) {
@@ -22,7 +21,7 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
         return Room(room.id, room.name, members)
     }
 
-    fun isExisting(room: Room) : Boolean{
+    fun isExisting(room: Room): Boolean {
         return roomDao.isExistingName(room.name)
     }
 
@@ -37,7 +36,7 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
     }
 
     fun findAccessibleRooms(member: Member): List<RoomInfo> {
-        val rooms :List<RoomInfo> = roomDao.getAllRoom()
+        val rooms: List<RoomInfo> = roomDao.getAllRoom()
         val ids = roomDao.findRoomByMember(member)
 
         return rooms.filter { room -> !ids.contains(room.id) }
@@ -49,5 +48,10 @@ class RoomRepositoryImpl(private val roomDao: RoomDao, private val memberDao: Me
 
     fun insertMemberInRoom(room: Room, member: Member) {
         roomDao.insertMemberInRoom(room, member)
+    }
+
+    fun remove(room: Room) {
+        roomDao.deleteAllParticipants(room)
+        roomDao.delete(room)
     }
 }

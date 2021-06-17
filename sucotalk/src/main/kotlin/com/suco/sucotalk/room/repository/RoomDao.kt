@@ -3,6 +3,7 @@ package com.suco.sucotalk.room.repository
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.domain.Room
 import com.suco.sucotalk.room.domain.RoomInfo
+import com.suco.sucotalk.room.exception.RoomException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -50,7 +51,7 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
                 RoomInfo(rs.getLong("id"), rs.getString("name"))
             }, id)!!
         } catch (e: EmptyResultDataAccessException) {
-            throw IllegalArgumentException("등록되지 않은 방입니다.")
+            throw RoomException("등록되지 않은 방입니다.")
         } catch (e: Exception) {
             throw SQLException("error with jdbcTemplate")
         }
@@ -83,5 +84,15 @@ class RoomDao(private val jdbcTemplate: JdbcTemplate) {
     fun isExistingName(name: String): Boolean {
         val sql = "SELECT EXISTS (SELECT id from ROOM WHERE name = ?)"
         return jdbcTemplate.queryForObject(sql, Boolean::class.java, name)
+    }
+
+    fun deleteAllParticipants(room: Room) {
+        val sql = "DELETE FROM PARTICIPANTS WHERE room_id = ?"
+        jdbcTemplate.update(sql, room.id)
+    }
+
+    fun delete(room: Room) {
+        val sql = "DELETE FROM Room WHERE id = ?"
+        jdbcTemplate.update(sql, room.id)
     }
 }

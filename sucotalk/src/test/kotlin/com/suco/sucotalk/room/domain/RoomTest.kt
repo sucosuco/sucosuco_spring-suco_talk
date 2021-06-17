@@ -17,11 +17,11 @@ internal class RoomTest{
         assertThat(room).isNotNull
     }
 
-    @DisplayName("1명 이하의 사용자로 방 생성 시 예외 발생")
+    @DisplayName("멤버가 없는 방은 존재할 수 없다.")
     @Test
     internal fun createRoomWithInsufficientMemberSize() {
         assertThrows<RoomException>{
-            Room("name", listOf(Member("ecsimsw", "1234")))
+            Room("name", listOf())
         }
     }
 

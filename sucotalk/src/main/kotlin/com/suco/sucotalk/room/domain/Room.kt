@@ -3,7 +3,7 @@ package com.suco.sucotalk.room.domain
 import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.room.exception.RoomException
 
-const val MINIMUM_MEMBER_SIZE = 2
+const val MINIMUM_MEMBER_SIZE = 1
 
 class Room(val id: Long?, val name: String, members: List<Member> = listOf()) {
 
@@ -11,11 +11,13 @@ class Room(val id: Long?, val name: String, members: List<Member> = listOf()) {
 
     init {
         require(name.isNotBlank()) { throw RoomException("방 이름이 없습니다.") }
-        require(members.size >= MINIMUM_MEMBER_SIZE) { throw RoomException("방은 최소 2명 이상이어야 합니다.") }
+        require(members.size >= MINIMUM_MEMBER_SIZE) { throw RoomException("방은 최소 한명 이상이어야 합니다.") }
         require(members.size == members.distinct().size) { throw RoomException("중복된 사용자가 있어선 안됩니다.") }
     }
 
     val members: MutableList<Member> = members.toMutableList()
+    val end: Boolean
+        get() = members.size <= 1
 
     fun enter(member: Member) {
         require(!members.contains(member)) { throw RoomException("이미 방에 존재하는 사용자입니다.") }
@@ -27,13 +29,7 @@ class Room(val id: Long?, val name: String, members: List<Member> = listOf()) {
         members.remove(member)
     }
 
-    fun isDm(): Boolean {
-        return members.size == 2
-    }
-
-    fun isParticipant(member: Member) : Boolean {
-        return members.contains(member)
-    }
+    fun isParticipant(member: Member): Boolean = members.contains(member)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

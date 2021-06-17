@@ -33,9 +33,9 @@ class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handlerUnhandledException(e:Exception): ResponseEntity<ExceptionResponseDto> {
+    fun handlerUnhandledException(e: Exception): ResponseEntity<ExceptionResponseDto> {
         // TODO :: logger 적용
-        println("====ERROR ::" +e.message)
+        println("====ERROR ::" + e.message)
 
         val message = "Oop.. There's unhandled exception"
         val exceptionResponse = ExceptionResponseDto(message)
