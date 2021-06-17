@@ -23,9 +23,6 @@ class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val me
         }
     }
 
-    // TODO :: AuthorizationExtractor.extract(httpServletRequest)
-    // 이걸 사용하는게 낫지 않을까??,
-    // 나도 httpServletRequest 를 직접 다루는 거에 거부감이 있긴한데 가급적 라이브러리를 사용하는게 어떤지..
     fun getPayloadFromBearer(bearerToken: String): String {
         try {
             val token = bearerToken.split(" ")[1]
