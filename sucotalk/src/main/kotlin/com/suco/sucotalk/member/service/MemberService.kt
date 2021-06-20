@@ -20,11 +20,6 @@ class MemberService(private val memberDao: MemberDao) {
         return memberDao.insert(Member(request.name, request.password))
     }
 
-    fun confirm(request: MemberRequest) {
-        val user = memberDao.findByName(request.name)
-        user.confirmPassword(request.password)
-    }
-
     fun findAll(): List<MemberResponse> {
         return MemberResponse.listOf(memberDao.findAll())
     }

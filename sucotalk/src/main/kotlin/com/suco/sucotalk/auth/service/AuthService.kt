@@ -12,17 +12,23 @@ import org.springframework.stereotype.Service
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val memberService: MemberService, private val memberDao: MemberDao) {
+class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val memberDao: MemberDao) {
 
     fun login(loginMember: MemberRequest): String? {
         try {
-            memberService.confirm(loginMember)
+            val user = memberDao.findByName(loginMember.name)
+            user.confirmPassword(loginMember.password)
             return jwtTokenProvider.createToken(loginMember.name)
         } catch (memberException: MemberException) {
             throw AuthException("로그인 실패")
         } catch (e: Exception) {
             throw IllegalArgumentException(e.message)
         }
+    }
+
+    fun confirm(request: MemberRequest) {
+        val user = memberDao.findByName(request.name)
+
     }
 
     fun getPayloadFromBearer(bearerToken: String): String {
