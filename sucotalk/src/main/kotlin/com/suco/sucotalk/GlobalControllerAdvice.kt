@@ -3,6 +3,8 @@ package com.suco.sucotalk
 import com.suco.sucotalk.auth.exception.AuthException
 import com.suco.sucotalk.member.exception.MemberException
 import com.suco.sucotalk.room.exception.RoomException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
 class GlobalControllerAdvice {
+    private val logger: Logger = LoggerFactory.getLogger(this.javaClass.simpleName)
 
     @ExceptionHandler(MemberException::class, RoomException::class)
     fun handleDomainException(e: RuntimeException): ResponseEntity<ExceptionResponseDto> {
@@ -34,10 +37,9 @@ class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception::class)
     fun handlerUnhandledException(e: Exception): ResponseEntity<ExceptionResponseDto> {
-        // TODO :: logger 적용
-        println("====ERROR ::" + e.message)
+        logger.error(e.message)
 
-        val message = "Oop.. There's unhandled exception"
+        val message = "Oops.. There's unhandled exception"
         val exceptionResponse = ExceptionResponseDto(message)
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse)
     }
