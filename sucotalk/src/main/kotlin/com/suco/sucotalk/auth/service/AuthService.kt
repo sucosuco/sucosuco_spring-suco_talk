@@ -3,14 +3,16 @@ package com.suco.sucotalk.auth.service
 import com.suco.sucotalk.auth.exception.AuthException
 import com.suco.sucotalk.auth.infrastructure.AuthorizationExtractor
 import com.suco.sucotalk.auth.infrastructure.JwtTokenProvider
+import com.suco.sucotalk.member.domain.Member
 import com.suco.sucotalk.member.dto.MemberRequest
 import com.suco.sucotalk.member.exception.MemberException
+import com.suco.sucotalk.member.repository.MemberDao
 import com.suco.sucotalk.member.service.MemberService
 import org.springframework.stereotype.Service
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val memberService: MemberService) {
+class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val memberService: MemberService, private val memberDao: MemberDao) {
 
     fun login(loginMember: MemberRequest): String? {
         try {
@@ -32,12 +34,8 @@ class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val me
         }
     }
 
-    fun getPayload(httpServletRequest: HttpServletRequest): String {
-        try {
-            val token = AuthorizationExtractor.extract(httpServletRequest)
-            return jwtTokenProvider.getPayload(token)
-        } catch (e: Exception) {
-            throw AuthException("로그인된 사용자가 아닙니다.")
-        }
+    fun findMemberByToken(token: String): Member {
+        val memberName = jwtTokenProvider.getPayload(token)
+        return memberDao.findByName(memberName)
     }
 }

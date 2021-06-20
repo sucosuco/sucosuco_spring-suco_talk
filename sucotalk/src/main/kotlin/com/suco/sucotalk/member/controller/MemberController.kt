@@ -1,6 +1,8 @@
 package com.suco.sucotalk.member.controller
 
+import com.suco.sucotalk.auth.domain.Authentication
 import com.suco.sucotalk.auth.service.AuthService
+import com.suco.sucotalk.member.domain.LoginMember
 import com.suco.sucotalk.member.dto.MemberRequest
 import com.suco.sucotalk.member.dto.MemberResponse
 import com.suco.sucotalk.member.service.MemberService
@@ -30,15 +32,13 @@ class MemberController(private val memberService: MemberService, private val aut
         return ResponseEntity.ok(memberService.findById(id))
     }
 
-    @GetMapping("/me")
-    fun findByToken(request: HttpServletRequest): ResponseEntity<MemberResponse> {
-        val userName = authService.getPayload(request)
-        return ResponseEntity.ok(memberService.findByName(userName))
+    @GetMapping("/me/auth")
+    fun findByToken(@Authentication loginMember: LoginMember): ResponseEntity<MemberResponse> {
+        return ResponseEntity.ok(memberService.findByName(loginMember.name))
     }
 
-    @GetMapping("/friends")
-    fun findFriends(request: HttpServletRequest): ResponseEntity<List<MemberResponse>> {
-        val userName = authService.getPayload(request)
-        return ResponseEntity.ok(memberService.findFriends(userName))
+    @GetMapping("/friends/auth")
+    fun findFriends(@Authentication loginMember: LoginMember): ResponseEntity<List<MemberResponse>> {
+        return ResponseEntity.ok(memberService.findFriends(loginMember.name))
     }
 }

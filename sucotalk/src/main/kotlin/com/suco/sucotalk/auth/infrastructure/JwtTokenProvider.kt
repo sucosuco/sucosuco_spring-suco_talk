@@ -26,7 +26,6 @@ class JwtTokenProvider {
     }
 
     fun getPayload(token: String?): String {
-        validateToken(token)
         return Jwts.parser()
             .setSigningKey(secretKey)
             .parseClaimsJws(token)

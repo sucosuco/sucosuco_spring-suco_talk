@@ -1,6 +1,8 @@
 package com.suco.sucotalk.room.controller
 
+import com.suco.sucotalk.auth.domain.Authentication
 import com.suco.sucotalk.auth.service.AuthService
+import com.suco.sucotalk.member.domain.LoginMember
 import com.suco.sucotalk.room.dto.RoomApproximate
 import com.suco.sucotalk.room.dto.RoomDetail
 import com.suco.sucotalk.room.dto.RoomRequest
@@ -25,37 +27,32 @@ class RoomController(private val roomService: RoomService, private val authServi
         return ResponseEntity.ok(roomService.roomDetail(roomId));
     }
 
-    @PostMapping
+    @PostMapping("/auth")
     fun createNewRoom(
         @Valid @RequestBody roomInfo: RoomRequest,
-        request: HttpServletRequest
+        @Authentication loginMember: LoginMember
     ): ResponseEntity<RoomApproximate>? {
-        val userName = authService.getPayload(request)
-        val room = roomService.createRoom(userName, roomInfo)
+        val room = roomService.createRoom(loginMember.name, roomInfo)
         return ResponseEntity.created(URI.create("/rooms/" + room.id)).body(room);
     }
 
-    @PostMapping("/enter/{room_id}")
-    fun enterRoom(@PathVariable("room_id") roomId: Long, request: HttpServletRequest) {
-        val userName = authService.getPayload(request)
-        roomService.enter(userName, roomId)
+    @PostMapping("/enter/{room_id}/auth")
+    fun enterRoom(@PathVariable("room_id") roomId: Long,  @Authentication loginMember: LoginMember) {
+        roomService.enter(loginMember.name, roomId)
     }
 
-    @PostMapping("/exit/{room_id}")
-    fun exitRoom(@PathVariable("room_id") roomId: Long, request: HttpServletRequest) {
-        val userName = authService.getPayload(request)
-        roomService.exit(userName, roomId)
+    @PostMapping("/exit/{room_id}/auth")
+    fun exitRoom(@PathVariable("room_id") roomId: Long, @Authentication loginMember: LoginMember) {
+        roomService.exit(loginMember.name, roomId)
     }
 
-    @GetMapping("/my")
-    fun getMyRooms(request: HttpServletRequest): ResponseEntity<List<RoomApproximate>> {
-        val userName = authService.getPayload(request)
-        return ResponseEntity.ok(roomService.myRooms(userName))
+    @GetMapping("/my/auth")
+    fun getMyRooms(@Authentication loginMember: LoginMember): ResponseEntity<List<RoomApproximate>> {
+        return ResponseEntity.ok(roomService.myRooms(loginMember.name))
     }
 
-    @GetMapping("/accessible")
-    fun getAccessibleRooms(request: HttpServletRequest): ResponseEntity<List<RoomApproximate>> {
-        val userName = authService.getPayload(request)
-        return ResponseEntity.ok(roomService.accessibleRooms(userName))
+    @GetMapping("/accessible/auth")
+    fun getAccessibleRooms(@Authentication loginMember: LoginMember): ResponseEntity<List<RoomApproximate>> {
+        return ResponseEntity.ok(roomService.accessibleRooms(loginMember.name))
     }
 }
