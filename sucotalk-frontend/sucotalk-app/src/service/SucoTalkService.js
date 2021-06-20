@@ -12,7 +12,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'get',
-            url: BASE_URL + 'rooms/my',
+            url: BASE_URL + 'rooms/my/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -24,7 +24,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'get',
-            url: BASE_URL + 'rooms/accessible',
+            url: BASE_URL + 'rooms/accessible/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -40,7 +40,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'get',
-            url: BASE_URL + 'member/friends',
+            url: BASE_URL + 'member/friends/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -52,7 +52,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'post',
-            url: BASE_URL + 'rooms',
+            url: BASE_URL + 'rooms/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -65,7 +65,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'post',
-            url: BASE_URL + 'rooms/enter/'+roomId,
+            url: BASE_URL + 'rooms/enter/'+roomId + '/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -77,7 +77,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'post',
-            url: BASE_URL + 'rooms/exit/' + roomId,
+            url: BASE_URL + 'rooms/exit/' + roomId + '/auth',
             headers :{
                 Authorization: auth_token,
             },
@@ -97,7 +97,7 @@ class SucoTalkService {
         const auth_token = "Bearer "+ localStorage.getItem("authorization")
         return axios({
             method: 'get',
-            url: BASE_URL + 'member/me',
+            url: BASE_URL + 'member/me/auth',
             headers :{
                 Authorization: auth_token,
             },

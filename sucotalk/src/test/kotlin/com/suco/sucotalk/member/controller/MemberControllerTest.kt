@@ -88,7 +88,7 @@ class MemberControllerTest {
         val userToken: String = response.getHeaderValue("Authorization").toString()
 
         mockMvc.perform(
-            get("/rooms/my")
+            get("/rooms/my/auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer $userToken")
         )
