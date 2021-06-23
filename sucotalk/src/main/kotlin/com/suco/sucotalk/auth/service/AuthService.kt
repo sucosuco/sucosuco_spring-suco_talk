@@ -26,11 +26,6 @@ class AuthService(private val jwtTokenProvider: JwtTokenProvider, private val me
         }
     }
 
-    fun confirm(request: MemberRequest) {
-        val user = memberDao.findByName(request.name)
-
-    }
-
     fun getPayloadFromBearer(bearerToken: String): String {
         try {
             val token = bearerToken.split(" ")[1]
