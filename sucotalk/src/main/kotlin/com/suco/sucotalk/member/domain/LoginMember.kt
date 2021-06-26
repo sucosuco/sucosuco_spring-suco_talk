@@ -22,5 +22,4 @@ class LoginMember (val id: Long, val name: String) {
     override fun hashCode(): Int {
         return id.hashCode()
     }
-
 }

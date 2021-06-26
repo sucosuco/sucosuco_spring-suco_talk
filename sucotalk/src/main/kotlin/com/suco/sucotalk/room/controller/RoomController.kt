@@ -1,7 +1,6 @@
 package com.suco.sucotalk.room.controller
 
 import com.suco.sucotalk.auth.domain.Authentication
-import com.suco.sucotalk.auth.service.AuthService
 import com.suco.sucotalk.member.domain.LoginMember
 import com.suco.sucotalk.room.dto.RoomApproximate
 import com.suco.sucotalk.room.dto.RoomDetail
@@ -10,12 +9,11 @@ import com.suco.sucotalk.room.service.RoomService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
-import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 @RequestMapping("/rooms")
 @RestController
-class RoomController(private val roomService: RoomService, private val authService: AuthService) {
+class RoomController(private val roomService: RoomService) {
 
     @GetMapping
     fun getAllRoom(): ResponseEntity<List<RoomApproximate>> {
@@ -37,7 +35,7 @@ class RoomController(private val roomService: RoomService, private val authServi
     }
 
     @PostMapping("/enter/{room_id}/auth")
-    fun enterRoom(@PathVariable("room_id") roomId: Long,  @Authentication loginMember: LoginMember) {
+    fun enterRoom(@PathVariable("room_id") roomId: Long, @Authentication loginMember: LoginMember) {
         roomService.enter(loginMember.name, roomId)
     }
 
