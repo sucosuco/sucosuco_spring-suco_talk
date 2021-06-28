@@ -10,3 +10,5 @@ Spring boot / Kotlin
 ## testing 4 -> suri test -> fail
 
 ## testing 5 -> suri test
+
+## testing 6 -> corgi connection test
