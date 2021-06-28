@@ -11,4 +11,6 @@ Spring boot / Kotlin
 
 ## testing 5 -> suri test
 
-## testing 6 -> corgi connection test
+## testing 6 -> corgi git connection test -> success
+
+## testing 7 -> corgi ec2 connection test
