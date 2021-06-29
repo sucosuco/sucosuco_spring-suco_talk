@@ -1,6 +1,10 @@
 # spring-suco_talk
 Spring boot / Kotlin 
 
+### jenkins
+
+- develop에 pr시 자동배포 확인
+
 ## testing 1 -> github hook : fail
 
 ## testing 2 -> fix build script
