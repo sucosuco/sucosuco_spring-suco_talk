@@ -15,4 +15,7 @@ Spring boot / Kotlin
 
 ## testing 7 -> corgi ec2 connection test -> success
 
-## testing 8 -> ec2-suco connection test
+## testing 8 -> ec2-suco connection test -> fail
+
+## testing 9 -> ec2-suco set credential connection test
+
